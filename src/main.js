@@ -4,71 +4,73 @@ import kaboom from "kaboom";
 kaboom({
 	background: [ 0, 0, 0, 1 ],
     canvas: document.querySelector("#myCanvas"),
-})
+});
 
 // define gravity
 setGravity(2400)
 
-// load a sprite called "bean"
+// loading the sprites
+// Heroes
 loadSprite("hero", "sprites/character1.png")
 loadSprite("ninja", "sprites/ninja.png")
 loadSprite("bunny", "sprites/bunny.png")
 loadSprite("killzone", "sprites/killzone.png")
 
+// Hero Weapons 
+loadSprite("carotte", "sprites/carotte.png")
 
-loadSprite("floor", "sprites/floor.png")
+// Hero animations
+loadSprite("frame1", "sprites/Frame_1.png")
+loadSprite("frame2", "sprites/Frame_2.png")
+loadSprite("frame3", "sprites/Frame_3.png")
+loadSprite("frame4", "sprites/Frame_4.png")
+loadSprite("frame5", "sprites/Frame_5.png")
 
+const frames = ["frame1", "frame2", "frame3", "frame4", "frame5"]
 
+// Bosses
 loadSprite("snowman", "sprites/snowman.png")
 loadSprite("golem", "sprites/golem.png")
 loadSprite("robot", "sprites/robot.png")
 
+// Decors
+loadSprite("floor", "sprites/floor.png")
+loadSprite("bgSky", "sprites/bgSky.png")
 
-function spin() {
-	let spinning = false
-	return {
-		id: "spin",
-		update() {
-			if (spinning) {
-				this.angle += 1200 * dt()
-				if (this.angle >= 360) {
-					this.angle = 0
-					spinning = false
-				}
-			}
-		},
-		spin() {
-			spinning = true
-		},
-	}
-}
-
-
+let background = add([
+    sprite("bgSky"),
+    // Make the background centered on the screen
+    pos(width() / 2, height() / 2),
+    anchor("center"),
+    // Allow the background to be scaled
+    scale(2),
+    // Keep the background position fixed even when the camera moves
+    fixed()
+  ]);
 
 
 // compose the player game object from multiple components and add it to the game
 const hero = add([
-    sprite("bunny"),
+    sprite("bunny"), // Possiblement Backend donc à générer à chaque début de partie
     pos(80, 40),
     area(),
     body(),
 	health(100),
-    spin(),
 ])
-
 
 const snowman = add([
 	sprite("snowman"),
-	pos(950, 80),
-	body(),
+	pos(940, height() - 480),
+	body({ isStatic: true}),
 	area(),
-	health(100)
+	health(100),
+    "ennemy",
 ])
 
 // Add a platform to hold the player
 add([
-    rect(width(), 48),
-    pos(0, height() - 48),
+    rect(width(), 40),
+    pos(0, height() - 40),
     outline(4),
     area(),
     body({ isStatic: true}),
@@ -76,40 +78,44 @@ add([
 ])
 
 
+const SPEED = 240
 
+// press "left key" or "d" to move left
+onKeyDown("left", () => {
+    hero.move(-SPEED, 0)
+})
+onKeyDown("q", () => {
+    hero.move(-SPEED, 0)
+})
+
+// press "right key" or "q" to move right 
+onKeyDown("right", () => {
+	hero.move(SPEED, 0)
+})
+onKeyDown("d", () => {
+	hero.move(SPEED, 0)
+})
 
 // press space to jump when hero is grounded
 onKeyPress("space", () => {
     if (hero.isGrounded()) {
         hero.jump();
-        hero.spin();
     }
 });
-
-
-const SPEED = 240
-// move left and right with arrow keys
-// onKeyDown() registers an event that runs every frame as long as user is holding a certain key
-onKeyDown("left", () => {
-	// .move() is provided by pos() component, move by pixels per second
-	hero.move(-SPEED, 0)
-})
-
-onKeyDown("right", () => {
-	hero.move(SPEED, 0)
-})
-
-
+onKeyPress("z", () => {
+    if (hero.isGrounded()) {
+        hero.jump();
+    }
+});
 
 function spawnBullet(p, mouseP) {
 
     const BULLET_SPEED = 800;
     const bullet = add([
-      rect(5, 5),
+      sprite('carotte'), // Possiblement backend
       area(),
       pos(p.sub(-12, -12)),
       anchor("center"),
-      color(255, 0, 0),
       outline(1),
       move(mouseP, BULLET_SPEED),
       offscreen({ destroy: true }),
@@ -128,5 +134,15 @@ onClick(() => {
     //   spawnBullet(playerP, angleInDeg);
     // }
     spawnBullet(playerP, angleInDeg);
-  });
-  
+});
+
+onCollide("bullet", "ennemy", (b) => {
+    destroy(b);
+    if (snowman.health === 0){
+        destroy(snowman);
+        shake();
+    } else {
+        snowman.health -= 10;
+    }
+    console.log(snowman.health);
+});
