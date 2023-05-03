@@ -7,7 +7,9 @@ kaboom({
 })
 
 // define gravity
-setGravity(2400)
+setGravity(2000)
+
+const jumpForce = 1000;
 
 // load a sprite called "bean"
 loadSprite("hero", "sprites/character1.png")
@@ -79,9 +81,9 @@ add([
 
 
 // press space to jump when hero is grounded
-onKeyPress("space", () => {
+onKeyPress("up", () => {
     if (hero.isGrounded()) {
-        hero.jump();
+        hero.jump(jumpForce);
         hero.spin();
     }
 });
@@ -98,6 +100,8 @@ onKeyDown("left", () => {
 onKeyDown("right", () => {
 	hero.move(SPEED, 0)
 })
+
+
 
 
 
