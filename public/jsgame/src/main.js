@@ -10,13 +10,60 @@ kaboom({
 setGravity(2400)
 
 // loading the sprites
-// Heroes
-loadSprite("hero", "sprites/character1.png")
-loadSprite("ninja", "sprites/ninja.png")
-loadSprite("bunny", "sprites/bunny.png")
-loadSprite("killzone", "sprites/killzone.png")
+// playeres
+loadSprite("ninja", "sprites/ninja_marche.png", {
+    sliceX: 14,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 1,
+            speed: 0.5,
+            loop: true,
+        },
+        "run": {
+            from: 2,
+            to: 13,
+            speed: 3,
+            loop: true,
+        },
+    }
+})
+loadSprite("bunny", "sprites/lapin_marche_droite.png", {
+    sliceX: 12,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 1,
+            speed: 5,
+            loop: true,
+        },
+        "run": {
+            from: 2,
+            to: 11,
+            speed: 10,
+            loop: true,
+        }
+    }
+});
+loadSprite("stormy", "sprites/stormy_marche.png", {
+    sliceX: 12,
+    anims: {
+        "idle": {
+            from: 0,
+            to: 1,
+            speed: 5,
+            loop: true,
+        },
+        "run": {
+            from: 2,
+            to: 11,
+            speed: 10,
+            loop: true,
+        },
+    }
+})
 
-// Hero Projectiles 
+// player Projectiles 
 loadSprite("carotte", "sprites/carotte.png")
 
 // Bosses
@@ -25,10 +72,28 @@ loadSprite("golem", "sprites/golem.png")
 loadSprite("robot", "sprites/robot.png")
 
 // Decors
-loadSprite("floor", "sprites/floor.png")
-loadSprite("bgSky", "sprites/bgSky.png")
+const floors = ["sol_chateau", "sol_sucre", "sol_space"];
+const fond = ["fond_chateau", "fond_sucre", "fond_space"];
+
+floors.forEach((floor) => {
+    loadSprite(floor, `sprites/${floor}.png`);
+});
+fond.forEach((fond) => {
+    loadSprite(fond, `sprites/${fond}.png`);
+
+})
+
+loadSprite("bgSky", "sprites/bgSky.png");
+
 
 // Scene Battle begins here
+// scene("menu", () => {
+
+
+// });
+
+
+
 scene("level1", () => {
 
     let BULLET_SPEED = 1200
@@ -50,13 +115,17 @@ scene("level1", () => {
 
 
     // compose the player game object from multiple components and add it to the game
-    const hero = add([
-        sprite("bunny"), // Possiblement Backend donc à générer à chaque début de partie
+    const player = add([
+        sprite("stormy"), // Possiblement Backend donc à générer à chaque début de partie
         pos(80, 40),
         area(),
         body(),
         health(PLAYER_HEALTH),
     ])
+
+    // .play is provided by sprite() component, it starts playing the specified animation (the animation information of "idle" is defined above in loadSprite)
+    player.play("idle");
+
 
     const snowman = add([
         sprite("snowman"),
@@ -77,31 +146,57 @@ scene("level1", () => {
         color(127, 200, 255),
     ])
 
+    // Switch to "idle" or "run" animation when player hits ground
+    player.onGround(() => {
+        if ((!isKeyDown("left") && !isKeyDown("right")) || (!isKeyDown("q") && !isKeyDown("d"))) {
+            player.play("idle")
+        } else {
+            player.play("run")
+        }
+    })
     // press "left key" or "d" to move left
     onKeyDown("left", () => {
-        hero.move(-PLAYER_SPEED, 0)
+        if (player.isGrounded() && player.curAnim() !== "run") {
+            player.play("run")
+        }
+        player.flipX = true;
+        player.move(-PLAYER_SPEED, 0)
     })
     onKeyDown("q", () => {
-        hero.move(-PLAYER_SPEED, 0)
+        if (player.isGrounded() && player.curAnim() !== "run") {
+            player.play("run")
+        }
+        player.flipX = true;
+        player.move(-PLAYER_SPEED, 0)
     })
 
     // press "right key" or "q" to move right 
     onKeyDown("right", () => {
-        hero.move(PLAYER_SPEED, 0)
+        if (player.isGrounded() && player.curAnim() !== "run") {
+            player.play("run")
+        }
+        player.flipX = false;
+        player.move(PLAYER_SPEED, 0);
+        // player.flipX(false);
     })
     onKeyDown("d", () => {
-        hero.move(PLAYER_SPEED, 0)
+        if (player.isGrounded() && player.curAnim() !== "run") {
+            player.play("run")
+        }
+        player.flipX = false;
+        player.move(PLAYER_SPEED, 0);
+        // player.flipX(false);
     })
 
-    // press space to jump when hero is grounded
+    // press space to jump when player is grounded
     onKeyPress("space", () => {
-        if (hero.isGrounded()) {
-            hero.jump();
+        if (player.isGrounded()) {
+            player.jump();
         }
     });
     onKeyPress("z", () => {
-        if (hero.isGrounded()) {
-            hero.jump();
+        if (player.isGrounded()) {
+            player.jump();
         }
     });
 
@@ -119,7 +214,7 @@ scene("level1", () => {
         ]);
     }
     onClick(() => {
-        const playerP = hero.pos;
+        const playerP = player.pos;
         const mouseP = mousePos();
     
         const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
@@ -137,6 +232,7 @@ scene("level1", () => {
             destroy(snowman);
             shake(3);
             wait(5, () => {
+                destroy(player);
                 go("Win");
             });
         } else {
@@ -186,7 +282,7 @@ scene("level2", () => {
 
 
     // compose the player game object from multiple components and add it to the game
-    const hero = add([
+    const player = add([
         sprite("bunny"), // Possiblement Backend donc à générer à chaque début de partie
         pos(80, 40),
         area(),
@@ -215,29 +311,29 @@ scene("level2", () => {
 
     // press "left key" or "d" to move left
     onKeyDown("left", () => {
-        hero.move(-PLAYER_SPEED, 0)
+        player.move(-PLAYER_SPEED, 0)
     })
     onKeyDown("q", () => {
-        hero.move(-PLAYER_SPEED, 0)
+        player.move(-PLAYER_SPEED, 0)
     })
 
     // press "right key" or "q" to move right 
     onKeyDown("right", () => {
-        hero.move(PLAYER_SPEED, 0)
+        player.move(PLAYER_SPEED, 0)
     })
     onKeyDown("d", () => {
-        hero.move(PLAYER_SPEED, 0)
+        player.move(PLAYER_SPEED, 0)
     })
 
-    // press space to jump when hero is grounded
+    // press space to jump when player is grounded
     onKeyPress("space", () => {
-        if (hero.isGrounded()) {
-            hero.jump();
+        if (player.isGrounded()) {
+            player.jump();
         }
     });
     onKeyPress("z", () => {
-        if (hero.isGrounded()) {
-            hero.jump();
+        if (player.isGrounded()) {
+            player.jump();
         }
     });
 
@@ -255,7 +351,7 @@ scene("level2", () => {
         ]);
     }
     onClick(() => {
-        const playerP = hero.pos;
+        const playerP = player.pos;
         const mouseP = mousePos();
     
         const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
