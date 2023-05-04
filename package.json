@@ -6,7 +6,11 @@
 		"zip": "npm run build && mkdir -p dist && zip -r dist/game.zip www -x \"**/.DS_Store\""
 	},
 	"dependencies": {
-		"kaboom": "^3000.0.0-beta.3"
+		"cors": "^2.8.5",
+		"express": "^4.18.2",
+		"kaboom": "^3000.0.0-beta.3",
+		"mysql": "^2.18.1",
+		"mysql2": "^3.2.4"
 	},
 	"devDependencies": {
 		"esbuild": "^0.17.18"
