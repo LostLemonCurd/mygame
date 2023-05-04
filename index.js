@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3000;
+const path = require('path');
 
 const corsOptions = {
     origin: '*',
@@ -9,6 +10,7 @@ const corsOptions = {
     optionSuccessStatus: 200,
 };
 
+app.use('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.use(cors(corsOptions));
@@ -18,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 
 
 app.get('/', (req, res) => {
-    res.send('<h1>Hello World!</h1>');
+    res.render('/public/jsgame/www/index.html');
 });
 
 app.use((err, req, res, next) => {

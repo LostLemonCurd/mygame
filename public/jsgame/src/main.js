@@ -129,7 +129,7 @@ scene("level1", () => {
 
     const robot = add([
         sprite("robot"),
-        pos(940, height() - 480),
+        pos(940, height() - 610),
         body({ isStatic: true}),
         area(),
         health(BOSS_HEALTH),
@@ -138,8 +138,8 @@ scene("level1", () => {
 
     // Add a platform to hold the player
     add([
-        rect(width(), 40),
-        pos(0, height() - 40),
+        sprite("sol_space"),
+        pos(0, height() - 150),
         outline(4),
         area(),
         body({ isStatic: true}),
@@ -267,7 +267,7 @@ scene("level2", () => {
     let PLAYER_HEALTH = 100
 
     let background = add([
-        sprite("sol_chateau"),
+        sprite("fond_chateau"),
         // Make the background centered on the screen
         pos(width() / 2, height() / 2),
         anchor("center"),
@@ -280,7 +280,7 @@ scene("level2", () => {
 
     // compose the player game object from multiple components and add it to the game
     const player = add([
-        sprite("bunny"), // Possiblement Backend donc à générer à chaque début de partie
+        sprite("ninja"), // Possiblement Backend donc à générer à chaque début de partie
         pos(80, 40),
         area(),
         body(),
@@ -369,7 +369,7 @@ scene("level2", () => {
                 go("level3");
             });
         } else {
-            BOSS_HEALTH -= 1000;
+            BOSS_HEALTH -= 10;
         }
     });
 });
