@@ -103,7 +103,7 @@ scene("level1", () => {
     let PLAYER_HEALTH = 100
 
     let background = add([
-        sprite("bgSky"),
+        sprite("fond_space"),
         // Make the background centered on the screen
         pos(width() / 2, height() / 2),
         anchor("center"),
@@ -127,8 +127,8 @@ scene("level1", () => {
     player.play("idle");
 
 
-    const snowman = add([
-        sprite("snowman"),
+    const robot = add([
+        sprite("robot"),
         pos(940, height() - 480),
         body({ isStatic: true}),
         area(),
@@ -220,16 +220,13 @@ scene("level1", () => {
         const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
     
         const angleInDeg = (angle * 180) / Math.PI;
-        // for (let i = 0; i < 30; i++) {
-        //   spawnBullet(playerP, angleInDeg);
-        // }
         spawnBullet(playerP, angleInDeg);
     });
 
     onCollide("bullet", "ennemy", (b) => {
         destroy(b);
         if (BOSS_HEALTH === 0){
-            destroy(snowman);
+            destroy(robot);
             shake(3);
             wait(5, () => {
                 destroy(player);
@@ -247,7 +244,7 @@ scene("Lose", () => {
 
 scene("Win", () => {
     add([
-		sprite("snowman"),
+		sprite("robot"),
 		anchor("center"),
 		pos(width() / 2, height() / 2),
 	])
@@ -257,7 +254,7 @@ scene("Win", () => {
 		anchor("center"),
 		pos(width() / 2, height() / 2),
 	])
-    wait(10, () => {
+    wait(5, () => {
         go("level2");
     });
 });
@@ -270,7 +267,7 @@ scene("level2", () => {
     let PLAYER_HEALTH = 100
 
     let background = add([
-        sprite("bgSky"),
+        sprite("sol_chateau"),
         // Make the background centered on the screen
         pos(width() / 2, height() / 2),
         anchor("center"),
@@ -290,8 +287,8 @@ scene("level2", () => {
         health(PLAYER_HEALTH),
     ])
 
-    const snowman = add([
-        sprite("snowman"),
+    const golem = add([
+        sprite("golem"),
         pos(940, height() - 480),
         body({ isStatic: true}),
         area(),
