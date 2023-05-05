@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const characters = require("../services/getCharacters");
+const characters = require("../services/characters");
 
 console.log("Nice");
 /* GET */

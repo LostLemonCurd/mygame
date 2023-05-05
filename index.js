@@ -2,7 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const charactersRouter = require('./routes/getCharacters');
+const charactersRouter = require('./routes/characters');
+const bossRouter = require('./routes/boss');
+const patternRouter = require('./routes/pattern');
+const projectileRouter = require('./routes/projectile');
 
 const corsOptions = {
     origin: '*',
@@ -23,6 +26,9 @@ app.get('/', (req, res) => {
 });
 
 app.use("/characters", charactersRouter);
+app.use("/boss", bossRouter);
+app.use("/projectile", projectileRouter);
+app.use("/pattern", patternRouter);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
