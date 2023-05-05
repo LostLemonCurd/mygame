@@ -9,7 +9,7 @@ con.connect(function (err){
     console.log("Connected!");
     // If the table characters does not exists, create it
     let sql = 
-    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly BOOLEAN, projectile INT)";
+    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly BOOLEAN, projectile INT, spliceX INT)";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table characters created");

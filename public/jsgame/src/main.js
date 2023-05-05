@@ -1,5 +1,56 @@
 import kaboom from "kaboom";
 
+let choosenChar = window.location.href;
+console.log(choosenChar);
+let idChar = choosenChar.split("=");
+console.log(idChar[1]);
+
+let urlChar = "http://localhost:3000/characters?id=" + idChar;
+fetch(urlChar, {
+  method: "get",
+  headers: new Headers({
+    "Content-Type": "application/json"
+  })
+})
+  .then(function (response) {
+    // Convert to JSON
+    return response.json();
+  })
+  .then(function (jsonResponse) {
+    console.log(jsonResponse);
+    // Créer les variables pour les stats du personnage
+    let spriteChar = jsonResponse.data[0].sprite;
+    let health = jsonResponse.data[0].health;
+    let speed = jsonResponse.data[0].speed;
+    let jumpForce = jsonResponse.data[0].jumpForce;
+    let canFly = jsonResponse.data[0].canFly;
+    let projectile = jsonResponse.data[0].projectile;
+    let sliceX = jsonResponse.data[0].sliceX;
+  });
+  
+  // RAJOUTER ROUTE ET SERVICES POUR CETTE REQUETE 
+let urlProj = "http://localhost:3000/projectile?id=" + idChar;
+fetch(urlProj, {
+  method: "get",
+  headers: new Headers({
+    "Content-Type": "application/json"
+  })
+})
+  .then(function (response) {
+    // Convert to JSON
+    return response.json();
+  })
+  .then(function (jsonResponse) {
+    console.log(jsonResponse);
+    // Créer les variables pour les stats du PROJECTILE
+    let spriteProj = jsonResponse.data[0].sprite;
+    let dmg = jsonResponse.data[0].dmg;
+    let speedProj = jsonResponse.data[0].speed;
+    let gravity = jsonResponse.data[0].gravity;
+    let isFriendly = jsonResponse.data[0].isFriendly;
+  });
+
+
 // initialize context
 kaboom({
 	background: [ 0, 0, 0, 1 ],
@@ -99,10 +150,10 @@ scene("level1", () => {
     // let sprite = "";
     let bulletSpeed = 1200;
     let bossSpeed = 48;
-    let playerSpeed = 240;
+    let playerSpeed = speed;
     let bossHealth = 1000;
-    let playerHealth = 100;
-    let jumpForce = 1000;
+    let playerHealth = health;
+    let jumpForce = jumpForce;
 
     let background = add([
         sprite("fond_space"),

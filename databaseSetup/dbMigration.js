@@ -12,9 +12,9 @@ con.connect(function (err) {
   // If it works, insert 4 new rows inside the characters table
   let sql = "INSERT INTO projectile (sprite, dmg, speed, isFriendly) VALUES ?";
   let values = [
-    ["carotte", 10, 900, true],
-    ["couteau", 8, 1200, true],
     ["bullet", 12, 1400, true],
+    ["couteau", 8, 1200, true],
+    ["carotte", 10, 900, true],
     ["punch", 5, 1800, true],
     ["rock", 10, 1600, true],
     ["snowball", 20, 1000, true],
@@ -24,11 +24,11 @@ con.connect(function (err) {
     console.log("Number of records inserted: " + result.affectedRows);
   });
   // If it works, insert 4 new rows inside the characters table
-  sql = "INSERT INTO characters (sprite, health, speed, jumpForce, canFly, projectile) VALUES ?";
+  sql = "INSERT INTO characters (sprite, health, speed, jumpForce, canFly, projectile, spliceX) VALUES ?";
   values = [
-    ["bunny", "240", "300", "1200", "0", "1"],
-    ["ninja", "150", "400", "1000", "0", "2"],
-    ["stormy", "300", "200", "800", "1", "3"],
+    ["stormy", "300", "200", "800", "1", "3", "7"],
+    ["ninja", "150", "400", "1000", "0", "2", "8"],
+    ["bunny", "240", "300", "1200", "0", "1", "9"],
   ];
   con.query(sql, [values], function (err, result) {
     if (err) throw err;
