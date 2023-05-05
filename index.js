@@ -6,6 +6,8 @@ const charactersRouter = require('./routes/characters');
 const bossRouter = require('./routes/boss');
 const patternRouter = require('./routes/pattern');
 const projectileRouter = require('./routes/projectile');
+const getCharacterRouter = require('./routes/getCharacter');
+const getProjectileRouter = require('./routes/getProjectile');
 
 const corsOptions = {
     origin: '*',
@@ -29,6 +31,8 @@ app.use("/characters", charactersRouter);
 app.use("/boss", bossRouter);
 app.use("/projectile", projectileRouter);
 app.use("/pattern", patternRouter);
+app.use("/getCharacter", getCharacterRouter);
+app.use("/getProjectile", getProjectileRouter);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

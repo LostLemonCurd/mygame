@@ -1,11 +1,15 @@
 import kaboom from "kaboom";
 
+// Récupérer l'id du personnage choisi dans l'URL
 let choosenChar = window.location.href;
 console.log(choosenChar);
 let idChar = choosenChar.split("=");
 console.log(idChar[1]);
 
-let urlChar = "http://localhost:3000/characters?id=" + idChar;
+let urlChar = `http://localhost:3000/getCharacter?id=${idChar[1]}`;
+console.log('urlChar', urlChar);
+
+// Récupérer les données du personnage choisi par le GAMER™
 fetch(urlChar, {
   method: "get",
   headers: new Headers({
@@ -28,9 +32,9 @@ fetch(urlChar, {
     let sliceX = jsonResponse.data[0].sliceX;
   });
   
-  // RAJOUTER ROUTE ET SERVICES POUR CETTE REQUETE 
-let urlProj = "http://localhost:3000/projectile?id=" + idChar;
-fetch(urlProj, {
+  let urlProj = `http://localhost:3000/getProjectile?id=${idChar[1]}`;
+console.log('urlProj', urlProj);
+  fetch(urlProj, {
   method: "get",
   headers: new Headers({
     "Content-Type": "application/json"
@@ -150,10 +154,10 @@ scene("level1", () => {
     // let sprite = "";
     let bulletSpeed = 1200;
     let bossSpeed = 48;
-    let playerSpeed = speed;
+    let playerSpeed = 300;
     let bossHealth = 1000;
-    let playerHealth = health;
-    let jumpForce = jumpForce;
+    let playerHealth = 100;
+    let jumpForce = 2000;
 
     let background = add([
         sprite("fond_space"),
