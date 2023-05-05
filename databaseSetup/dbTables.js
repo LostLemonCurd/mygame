@@ -14,7 +14,7 @@ con.connect(function (err){
     console.log("Connected!");
     // If the table characters does not exists, create it
     let sql = 
-    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly bool, projectile INT)";
+    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly BOOLEAN, projectile INT, FOREIGN KEY (projectile) references projectile(id))";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table characters created");
@@ -28,14 +28,14 @@ con.connect(function (err){
     });
 
     sql = 
-    "CREATE TABLE IF NOT EXISTS projectile (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), dmg INT, speed INT, gravity FLOAT, isFriendly bool)";
+    "CREATE TABLE IF NOT EXISTS projectile (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), dmg INT, speed INT, gravity FLOAT, isFriendly BOOLEAN)";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table projectile created");
     });
 
     sql = 
-    "CREATE TABLE IF NOT EXISTS pattern (id INT AUTO_INCREMENT PRIMARY KEY, idBoss INT FOREIGN KEY references boss(id), idProj INT FOREIGN KEY references projectile(id), amount INT)";
+    "CREATE TABLE IF NOT EXISTS pattern (id INT AUTO_INCREMENT PRIMARY KEY, idBoss INT, idProj INT, amount INT, FOREIGN KEY (idBoss) references boss(id), FOREIGN KEY (idProj) references projectile(id))";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table pattern created");

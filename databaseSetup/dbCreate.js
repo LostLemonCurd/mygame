@@ -1,5 +1,6 @@
 const mysql = require("mysql");
 
+
 // createConnection prépare la connexion à la base de données
 let con = mysql.createConnection({
     host: "localhost",

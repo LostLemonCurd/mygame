@@ -96,11 +96,13 @@ loadSprite("bgSky", "sprites/bgSky.png");
 
 scene("level1", () => {
 
-    let BULLET_SPEED = 1200
-    let BOSS_SPEED = 48
-    let PLAYER_SPEED = 240
-    let BOSS_HEALTH = 1000
-    let PLAYER_HEALTH = 100
+    let sprite = "";
+    let bulletSpeed = 1200;
+    let bossSpeed = 48;
+    let playerSpeed = 240;
+    let bossHealth = 1000;
+    let playerHealth = 100;
+    let jumpForce = 1000;
 
     let background = add([
         sprite("fond_space"),
@@ -120,19 +122,19 @@ scene("level1", () => {
         pos(80, 40),
         area(),
         body(),
-        health(PLAYER_HEALTH),
+        health(playerHealth),
     ])
 
     // .play is provided by sprite() component, it starts playing the specified animation (the animation information of "idle" is defined above in loadSprite)
     player.play("idle");
 
 
-    const robot = add([
+    const boss = add([
         sprite("robot"),
         pos(940, height() - 610),
         body({ isStatic: true}),
         area(),
-        health(BOSS_HEALTH),
+        health(bossHealth),
         "ennemy",
     ])
 
@@ -160,14 +162,14 @@ scene("level1", () => {
             player.play("run")
         }
         player.flipX = true;
-        player.move(-PLAYER_SPEED, 0)
+        player.move(-playerSpeed, 0)
     })
     onKeyDown("q", () => {
         if (player.isGrounded() && player.curAnim() !== "run") {
             player.play("run")
         }
         player.flipX = true;
-        player.move(-PLAYER_SPEED, 0)
+        player.move(-playerSpeed, 0)
     })
 
     // press "right key" or "q" to move right 
@@ -176,7 +178,7 @@ scene("level1", () => {
             player.play("run")
         }
         player.flipX = false;
-        player.move(PLAYER_SPEED, 0);
+        player.move(playerSpeed, 0);
         // player.flipX(false);
     })
     onKeyDown("d", () => {
@@ -184,7 +186,7 @@ scene("level1", () => {
             player.play("run")
         }
         player.flipX = false;
-        player.move(PLAYER_SPEED, 0);
+        player.move(playerSpeed, 0);
         // player.flipX(false);
     })
 
@@ -207,7 +209,7 @@ scene("level1", () => {
             pos(p.sub(-12, -12)),
             anchor("center"),
             outline(1),
-            move(mouseP, BULLET_SPEED),
+            move(mouseP, bulletSpeed),
             offscreen({ destroy: true }),
             // strings here means a tag
             "bullet",
@@ -225,15 +227,15 @@ scene("level1", () => {
 
     onCollide("bullet", "ennemy", (b) => {
         destroy(b);
-        if (BOSS_HEALTH === 0){
-            destroy(robot);
+        if (bossHealth === 0){
+            destroy(boss);
             shake(3);
             wait(5, () => {
                 destroy(player);
                 go("Win");
             });
         } else {
-            BOSS_HEALTH -= 100;
+            bossHealth -= 100;
         }
     });
 });
@@ -260,11 +262,11 @@ scene("Win", () => {
 });
 
 scene("level2", () => {
-    let BULLET_SPEED = 1200
-    let BOSS_SPEED = 48
-    let PLAYER_SPEED = 240
-    let BOSS_HEALTH = 1000
-    let PLAYER_HEALTH = 100
+    let bulletSpeed = 1200
+    let bossSpeed = 48
+    let playerSpeed = 240
+    let bossHealth = 1000
+    let playerHealth = 100
 
     let background = add([
         sprite("fond_chateau"),
@@ -284,22 +286,22 @@ scene("level2", () => {
         pos(80, 40),
         area(),
         body(),
-        health(PLAYER_HEALTH),
+        health(playerHealth),
     ])
 
-    const golem = add([
+    const boss = add([
         sprite("golem"),
         pos(940, height() - 480),
         body({ isStatic: true}),
         area(),
-        health(BOSS_HEALTH),
+        health(bossHealth),
         "ennemy",
     ])
 
     // Add a platform to hold the player
     add([
-        rect(width(), 40),
-        pos(0, height() - 40),
+        sprite("sol_chateau"),
+        pos(0, height() - 150),
         outline(4),
         area(),
         body({ isStatic: true}),
@@ -308,18 +310,18 @@ scene("level2", () => {
 
     // press "left key" or "d" to move left
     onKeyDown("left", () => {
-        player.move(-PLAYER_SPEED, 0)
+        player.move(-playerSpeed, 0)
     })
     onKeyDown("q", () => {
-        player.move(-PLAYER_SPEED, 0)
+        player.move(-playerSpeed, 0)
     })
 
     // press "right key" or "q" to move right 
     onKeyDown("right", () => {
-        player.move(PLAYER_SPEED, 0)
+        player.move(playerSpeed, 0)
     })
     onKeyDown("d", () => {
-        player.move(PLAYER_SPEED, 0)
+        player.move(playerSpeed, 0)
     })
 
     // press space to jump when player is grounded
@@ -341,7 +343,7 @@ scene("level2", () => {
             pos(p.sub(-12, -12)),
             anchor("center"),
             outline(1),
-            move(mouseP, BULLET_SPEED),
+            move(mouseP, bulletSpeed),
             offscreen({ destroy: true }),
             // strings here means a tag
             "bullet",
@@ -362,16 +364,146 @@ scene("level2", () => {
 
     onCollide("bullet", "ennemy", (b) => {
         destroy(b);
-        if (BOSS_HEALTH === 0){
-            destroy(snowman);
+        if (bossHealth === 0){
+            destroy(boss);
             shake();
-            wait(10, () => {
+            wait(5, () => {
                 go("level3");
             });
         } else {
-            BOSS_HEALTH -= 10;
+            bossHealth -= 10;
+        }
+    });
+});
+
+
+
+
+
+
+scene("level3", () => {
+    let bulletSpeed = 1200
+    let bossSpeed = 48
+    let playerSpeed = 240
+    let bossHealth = 1000
+    let playerHealth = 100
+
+    let background = add([
+        sprite("fond_sucre"),
+        // Make the background centered on the screen
+        pos(width() / 2, height() / 2),
+        anchor("center"),
+        // Allow the background to be scaled
+        scale(2),
+        // Keep the background position fixed even when the camera moves
+        fixed()
+    ]);
+
+
+    // compose the player game object from multiple components and add it to the game
+    const player = add([
+        sprite("ninja"), // Possiblement Backend donc à générer à chaque début de partie
+        pos(80, 40),
+        area(),
+        body(),
+        health(playerHealth),
+    ])
+
+    const boss = add([
+        sprite("snowman"),
+        pos(940, height() - 580),
+        body({ isStatic: true}),
+        area(),
+        health(bossHealth),
+        "ennemy",
+    ])
+
+    // Add a platform to hold the player
+    add([
+        sprite("sol_sucre"),
+        pos(0, height() - 235),
+        outline(4),
+        area(),
+        body({ isStatic: true}),
+        color(127, 200, 255),
+        z(1000)
+    ]);
+
+
+    add([
+        rect(width(), 130),
+        pos(0, height() - 130),
+        area(),
+        body({ isStatic: true}),
+        z(100),
+    ]);
+
+    // press "left key" or "d" to move left
+    onKeyDown("left", () => {
+        player.move(-playerSpeed, 0)
+    })
+    onKeyDown("q", () => {
+        player.move(-playerSpeed, 0)
+    })
+
+    // press "right key" or "q" to move right 
+    onKeyDown("right", () => {
+        player.move(playerSpeed, 0)
+    })
+    onKeyDown("d", () => {
+        player.move(playerSpeed, 0)
+    })
+
+    // press space to jump when player is grounded
+    onKeyPress("space", () => {
+        if (player.isGrounded()) {
+            player.jump();
+        }
+    });
+    onKeyPress("z", () => {
+        if (player.isGrounded()) {
+            player.jump();
+        }
+    });
+
+    function spawnBullet(p, mouseP) {
+        const bullet = add([
+            sprite('carotte'), // Possiblement backend
+            area(),
+            pos(p.sub(-12, -12)),
+            anchor("center"),
+            outline(1),
+            move(mouseP, bulletSpeed),
+            offscreen({ destroy: true }),
+            // strings here means a tag
+            "bullet",
+        ]);
+    }
+    onClick(() => {
+        const playerP = player.pos;
+        const mouseP = mousePos();
+    
+        const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
+    
+        const angleInDeg = (angle * 180) / Math.PI;
+        // for (let i = 0; i < 30; i++) {
+        //   spawnBullet(playerP, angleInDeg);
+        // }
+        spawnBullet(playerP, angleInDeg);
+    });
+
+    onCollide("bullet", "ennemy", (b) => {
+        destroy(b);
+        if (bossHealth === 0){
+            destroy(golem);
+            shake();
+            wait(5, () => {
+                go("level3");
+            });
+        } else {
+            bossHealth -= 10;
         }
     });
 });
 // Start the game scene
-go("level1");
+go("level3");
