@@ -121,6 +121,7 @@ function spawnBullet(p, mouseP) {
       "bullet",
     ]);
 }
+/*
 onClick(() => {
     const playerP = hero.pos;
     const mouseP = mousePos();
@@ -133,4 +134,17 @@ onClick(() => {
     // }
     spawnBullet(playerP, angleInDeg);
   });
+*/
+
+onKeyDown('click', () => {
+    const playerP = hero.pos;
+    const mouseP = mousePos();
   
+    const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
+  
+    const angleInDeg = (angle * 180) / Math.PI;
+    // for (let i = 0; i < 30; i++) {
+    //   spawnBullet(playerP, angleInDeg);
+    // }
+    spawnBullet(playerP, angleInDeg);
+})

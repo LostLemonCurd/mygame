@@ -10,6 +10,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "dev": "clear && nodemon index.js"
+    "dev": "clear && nodemon index.js",
+    "dev2": "nodemon index.js"
   }
 }
