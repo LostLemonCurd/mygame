@@ -11,53 +11,83 @@ setGravity(2400)
 
 // loading the sprites
 // playeres
-loadSprite("ninja", "sprites/ninja_marche.png", {
-    sliceX: 14,
+loadSprite("ninja", "sprites/anim/ninja_anim.png", {
+    sliceX: 8,
     anims: {
         "idle": {
             from: 0,
             to: 1,
-            speed: 0.5,
+            speed: 2,
             loop: true,
         },
         "run": {
-            from: 2,
-            to: 13,
-            speed: 3,
+            from: 5,
+            to: 7,
+            speed: 8,
+            loop: true,
+        },
+        "jump": {
+            from: 13,
+            to: 25,
+            speed: 30,
             loop: true,
         },
     }
 })
-loadSprite("bunny", "sprites/lapin_marche_droite.png", {
-    sliceX: 12,
+loadSprite("bunny", "sprites/anim/lapin_anim.png", {
+    sliceX: 9,
     anims: {
         "idle": {
             from: 0,
             to: 1,
-            speed: 5,
+            speed: 2,
             loop: true,
         },
         "run": {
-            from: 2,
-            to: 11,
-            speed: 10,
+            from: 6,
+            to: 8,
+            speed: 8,
             loop: true,
-        }
+        },
+        "jump": {
+            from: 1,
+            to: 2,
+            speed: 1,
+            loop: true,
+        },
+        "dead": {
+            from: 3,
+            to: 3,
+            speed: 0,
+            loop: true,
+        },
     }
 });
-loadSprite("stormy", "sprites/stormy_marche.png", {
-    sliceX: 12,
+loadSprite("stormy", "sprites/anim/stormy_anim.png", {
+    sliceX: 7,
     anims: {
         "idle": {
             from: 0,
             to: 1,
-            speed: 5,
+            speed: 2,
             loop: true,
         },
         "run": {
-            from: 2,
-            to: 11,
+            from: 4,
+            to: 6,
             speed: 10,
+            loop: true,
+        },
+        "jump": {
+            from: 2,
+            to: 2,
+            speed: 0,
+            loop: true,
+        },
+        "dead": {
+            from: 3,
+            to: 3,
+            speed: 0,
             loop: true,
         },
     }
@@ -96,7 +126,7 @@ loadSprite("bgSky", "sprites/bgSky.png");
 
 scene("level1", () => {
 
-    let sprite = "";
+    // let sprite = "";
     let bulletSpeed = 1200;
     let bossSpeed = 48;
     let playerSpeed = 240;
@@ -118,7 +148,7 @@ scene("level1", () => {
 
     // compose the player game object from multiple components and add it to the game
     const player = add([
-        sprite("stormy"), // Possiblement Backend donc à générer à chaque début de partie
+        sprite("ninja"), // Possiblement Backend donc à générer à chaque début de partie
         pos(80, 40),
         area(),
         body(),
@@ -192,8 +222,8 @@ scene("level1", () => {
 
     // press space to jump when player is grounded
     onKeyPress("space", () => {
-        if (player.isGrounded()) {
-            player.jump();
+        if (player.isGrounded() && player.curAnim() !=="jump") {
+            player.jump("jump");
         }
     });
     onKeyPress("z", () => {
@@ -506,4 +536,4 @@ scene("level3", () => {
     });
 });
 // Start the game scene
-go("level3");
+go("level1");
