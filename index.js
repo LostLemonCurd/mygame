@@ -6,6 +6,15 @@ const path = require('path');
 // const router = express.Router();
 
 
+// used to visualize the "characters" table 
+
+/*
+app.use("/characters", charactersRouter);
+app.use("/boss", bossRouter);
+app.use("/projectile", projectileRouter);
+app.use("/pattern", patternRouter);
+*/
+
 const corsOptions = {
     origin: '*',
     credentials: true,
