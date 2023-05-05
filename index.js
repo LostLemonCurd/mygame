@@ -3,6 +3,8 @@ const cors = require('cors');
 const app = express();
 const port = 3000;
 const path = require('path');
+// const router = express.Router();
+
 
 const corsOptions = {
     origin: '*',
@@ -41,3 +43,5 @@ var server = app.listen(8081, () => {
 
     console.log(`Example server listening at http://${host}:${port}`)
 });
+
+// module.exports = router ;

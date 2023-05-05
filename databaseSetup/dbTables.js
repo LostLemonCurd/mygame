@@ -1,13 +1,35 @@
 const mysql = require("mysql");
 
 // createConnection prépare la connexion à la base de données
-let con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    port: 8889,
-    database: "arenaHeroes",
-}); 
+// let con ;
+if (navigator.userAgent.indexOf('Mac OS X') != -1) {
+    let con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "root",
+        port: 8889,
+        database: "arenaHeroes",
+    }); 
+    
+    } else {
+    let con = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "",
+        port: 8889,
+        database: "arenaHeroes",
+    }); 
+    
+}
+
+
+// let con = mysql.createConnection({
+//     host: "localhost",
+//     user: "root",
+//     password: "root",
+//     port: 8889,
+//     database: "arenaHeroes",
+// }); 
 
 con.connect(function (err){
     if (err) throw err;
