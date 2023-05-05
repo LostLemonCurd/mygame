@@ -13,12 +13,27 @@ let con = mysql.createConnection({
 con.connect(function (err) {
   if (err) throw err;
   console.log("Connected!");
+
   // If it works, insert 4 new rows inside the characters table
-  let sql = "INSERT INTO characters (sprite, health, speed, jumpForce, canFly, projectile) VALUES ?";
+  let sql = "INSERT INTO projectile (sprite, dmg, speed, isFriendly) VALUES ?";
   let values = [
-    ["bunny", "240", "300", "1200", "false", "1"],
-    ["ninja", "150", "400", "1000", "false", "2"],
-    ["stormy", "300", "200", "800", "true", "3"],
+    ["carotte", 10, 900, true],
+    ["couteau", 8, 1200, true],
+    ["bullet", 12, 1400, true],
+    ["punch", 5, 1800, true],
+    ["rock", 10, 1600, true],
+    ["snowball", 20, 1000, true],
+  ];
+  con.query(sql, [values], function (err, result) {
+    if (err) throw err;
+    console.log("Number of records inserted: " + result.affectedRows);
+  });
+  // If it works, insert 4 new rows inside the characters table
+  sql = "INSERT INTO characters (sprite, health, speed, jumpForce, canFly, projectile) VALUES ?";
+  values = [
+    ["bunny", "240", "300", "1200", "0", "1"],
+    ["ninja", "150", "400", "1000", "0", "2"],
+    ["stormy", "300", "200", "800", "1", "3"],
   ];
   con.query(sql, [values], function (err, result) {
     if (err) throw err;
@@ -38,20 +53,6 @@ con.connect(function (err) {
   });
 
 
-  // If it works, insert 4 new rows inside the characters table
-  sql = "INSERT INTO projectile (sprite, dmg, speed, isFriendly) VALUES ?";
-  values = [
-    ["carotte", 10, 900, true],
-    ["couteau", 8, 1200, true],
-    ["bullet", 12, 1400, true],
-    ["punch", 5, 1800, true],
-    ["rock", 10, 1600, true],
-    ["snowball", 20, 1000, true],
-  ];
-  con.query(sql, [values], function (err, result) {
-    if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
-  });
 
   // If it works, insert 4 new rows inside the characters table
   sql = "INSERT INTO pattern (idBoss, idProj, amount) VALUES ?";

@@ -96,7 +96,7 @@ loadSprite("bgSky", "sprites/bgSky.png");
 
 scene("level1", () => {
 
-    let sprite = "";
+    // let sprite = "";
     let bulletSpeed = 1200;
     let bossSpeed = 48;
     let playerSpeed = 240;
@@ -506,4 +506,4 @@ scene("level3", () => {
     });
 });
 // Start the game scene
-go("level3");
+go("level1");
