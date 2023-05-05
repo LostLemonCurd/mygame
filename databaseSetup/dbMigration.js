@@ -1,13 +1,8 @@
 let mysql = require("mysql");
+const config = require("../config")
 
 // Prepare the connection to the database named "dbTest"
-let con = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "root",
-  port: 8889,
-  database: "arenaHeroes"
-});
+let con = mysql.createConnection(config.db);
 
 // Tries to connect
 con.connect(function (err) {

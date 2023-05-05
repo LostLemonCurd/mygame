@@ -4,7 +4,7 @@ const config = {
         user: "root",
         password: "root",
         port: 8889,
-        dzatabase: "arenaHeroes"
+        database: "arenaHeroes"
     },
     listPerPages: 10
 };

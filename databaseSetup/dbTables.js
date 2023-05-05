@@ -1,13 +1,8 @@
 const mysql = require("mysql");
+const config = require("../config")
 
 // createConnection prépare la connexion à la base de données
-let con = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    password: "root",
-    port: 8889,
-    database: "arenaHeroes",
-}); 
+let con = mysql.createConnection(config.db); 
 
 con.connect(function (err){
     if (err) throw err;

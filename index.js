@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const port = 3000;
-const path = require('path');
+const charactersRouter = require('./routes/getCharacters');
 
 const corsOptions = {
     origin: '*',
@@ -10,7 +10,6 @@ const corsOptions = {
     optionSuccessStatus: 200,
 };
 
-app.use('view engine', 'ejs');
 app.use(express.static('public'));
 
 app.use(cors(corsOptions));
@@ -22,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.render('/public/jsgame/www/index.html');
 });
+
+app.use("/characters", charactersRouter);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
