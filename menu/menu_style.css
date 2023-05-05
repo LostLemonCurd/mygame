@@ -1,7 +1,7 @@
 * {
-    margin: 0;
-    padding: 0;
-  }
+  margin: 0;
+  padding: 0;
+}
 .fond {
   height: 823px;
   background-image: url("images/menu1.png");
@@ -11,40 +11,40 @@
   background-size: cover;
 }
 .heros {
-    display: flex;
-    margin: 7vw auto;
-    width: 60%;
-    justify-content: space-around;
+  display: flex;
+  margin: 7vw auto;
+  width: 60%;
+  justify-content: space-around;
 }
 .hero {
-   display: grid;
+  display: grid;
 }
 .hero img {
-    margin: auto;
+  margin: auto;
 }
 a {
-    margin-bottom: 2vw;
+  margin-bottom: 2vw;
 }
 .rond {
-    margin: auto;
-    size: 100%;
-    border-radius: 50%;  
+  margin: auto;
+  size: 100%;
+  border-radius: 50%;
 }
 .rond:hover {
-    box-shadow: 5px 5px 15px 5px #000000;
-    width: 270px;
-    transition: 0.5s;
-    cursor: pointer;
-  }
-  .fond1 {
-    height: 823px;
-    background-image: url("images/premier_page.png");
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    background-size: cover;
-    margin: auto;
-  }
-  .fond1 a {
-    margin-top: 38vw !important; 
-  }
+  box-shadow: 5px 5px 15px 5px #000000;
+  width: 230px;
+  transition: 0.5s;
+  cursor: pointer;
+}
+.fond1 {
+  height: 823px;
+  background-image: url("images/premier_page.png");
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  background-size: cover;
+  margin: auto;
+}
+.fond1 a {
+  margin-top: 38vw !important;
+}
