@@ -9,6 +9,11 @@ kaboom({
 // define gravity
 setGravity(2400)
 
+// recup valeur html 
+
+// fetch()
+
+
 // loading the sprites
 // playeres
 loadSprite("ninja", "sprites/ninja_marche.png", {
