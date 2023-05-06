@@ -388,8 +388,8 @@ Promise.all([
 
 
         // compose the player game object from multiple components and add it to the game
-        const player = add([
-            sprite(spriteChar), // Possiblement Backend donc à générer à chaque début de partie
+        const  player = add([
+            sprite(spriteChar), 
             pos(80, 40),
             area(),
             body(),
