@@ -15,6 +15,8 @@ app.use("/projectile", projectileRouter);
 app.use("/pattern", patternRouter);
 */
 
+
+
 const corsOptions = {
     origin: '*',
     credentials: true,
