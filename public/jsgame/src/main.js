@@ -4,59 +4,6 @@ import kaboom from "kaboom";
 let choosenChar = window.location.href;
 let idChar = choosenChar.split("=");
 
-// let urlChar = `http://localhost:3000/getCharacter?id=${idChar[1]}`;
-// console.log('urlChar', urlChar);
-// let spriteChar, healthChar, speedChar, jumpForceChar, canFlyChar, projectileChar, sliceXChar;
-// // Récupérer les données du personnage choisi par le GAMER™
-// fetch(urlChar, {
-//   method: "get",
-//   headers: new Headers({
-//     "Content-Type": "application/json"
-//   })
-// })
-//   .then(function (response) {
-//     // Convert to JSON
-//     return response.json();
-//   })
-//   .then(function (jsonResponse) {
-//     console.log(jsonResponse);
-//     // Créer les variables pour les stats du personnage
-//     spriteChar = jsonResponse.data[0].sprite;
-//     healthChar = jsonResponse.data[0].health;
-//     speedChar = jsonResponse.data[0].speed;
-//     jumpForceChar = jsonResponse.data[0].jumpForce;
-//     canFlyChar = jsonResponse.data[0].canFly;
-//     projectileChar = jsonResponse.data[0].projectile;
-//     sliceXChar = jsonResponse.data[0].sliceX;
-//     console.log('spriteChar', spriteChar);
-//   });
-  
-
-
-// let urlProj = `http://localhost:3000/getProjectile?id=${idChar[1]}`;
-// console.log('urlProj', urlProj);
-
-// let spriteProj, dmgProj, speedProj, gravityProj, isFriendlyProj;
-// fetch(urlProj, {
-//   method: "get",
-//   headers: new Headers({
-//     "Content-Type": "application/json"
-//   })
-// })
-//   .then(function (response) {
-//     // Convert to JSON
-//     return response.json();
-//   })
-//   .then(function (jsonResponse) {
-//     console.log(jsonResponse);
-//     // Créer les variables pour les stats du PROJECTILE
-//     spriteProj = jsonResponse.data[0].sprite;
-//     dmgProj = jsonResponse.data[0].dmg;
-//     speedProj = jsonResponse.data[0].speed;
-//     gravityProj= jsonResponse.data[0].gravity;
-//     isFriendlyProj = jsonResponse.data[0].isFriendly;
-//   });
-
 let urlChar = `http://localhost:3000/getCharacter?id=${idChar[1]}`;
 let urlProj = `http://localhost:3000/getProjectile?id=${idChar[1]}`;
 
@@ -210,15 +157,18 @@ Promise.all([
 
     // Decors
     const floors = ["sol_chateau", "sol_sucre", "sol_space", "sol_sucre2"];
-    const fond = ["fond_chateau", "fond_sucre", "fond_space", 'fond_sucre2'];
+    const fonds = ["fond_chateau", "fond_sucre", "fond_space", 'fond_sucre2'];
+    const platforms = ["platform_chateau", "platform_sucre", "platform_space"];
 
     floors.forEach((floor) => {
         loadSprite(floor, `sprites/${floor}.png`);
     });
-    fond.forEach((fond) => {
+    fonds.forEach((fond) => {
         loadSprite(fond, `sprites/${fond}.png`);
-
-    })
+    });
+    platforms.forEach((platform) => {
+        loadSprite(platform, `sprites/${platform}.png`);
+    });
 
     loadSprite("bgSky", "sprites/bgSky.png");
 
@@ -351,7 +301,7 @@ Promise.all([
         // define some hardcoded variables for the boss (to be replaced with a fetch request)
         let bossSpeed = 48;
         let bossHealth = 200;
-        let dmgBoss = 5;
+        let bossDmg = 5;
 
 
         let background = add([
@@ -394,6 +344,27 @@ Promise.all([
             body({ isStatic: true}),
             color(127, 200, 255),
         ])
+
+        let platformTimeout;
+        function addPlatform(){
+            add([
+                sprite("platform_space"),
+                area(),
+                pos(rand(100, 900), height() - 150),
+                body({ isStatic: true }),
+                offscreen({ destroy: true }),
+                anchor("center"),
+                "platform",
+                {
+                    speed: 100,
+                    dir: -1,
+                },
+            ])
+        };
+        onUpdate("platform", (p) => {
+            p.move(0, p.dir * p.speed)
+        })
+        platformTimeout = setInterval(addPlatform, 5000);
 
         // Switch to "idle" or "run" animation when player hits ground
         player.onGround(() => {
@@ -472,6 +443,7 @@ Promise.all([
             spawnBullet(playerP, angleInDeg, spriteProj);
         });
 
+
         // Add a healthbar and update it on projectile hit
         boss.onCollide("bullet", (b) => {
             destroy(b);
@@ -481,7 +453,7 @@ Promise.all([
             console.log('Health after hit', bossHealth);
         });
 
-        const healthbar = add([
+        const healthbarBoss = add([
             rect(width(), 24),
             pos(0, 0),
             color(240, 43, 43),
@@ -496,19 +468,37 @@ Promise.all([
         ])
 
         boss.on("hurt", () => {
-            healthbar.set(boss.hp())
+            healthbarBoss.set(boss.hp())
         })
 
-        onCollide("bullet", "player", (b) => {
-            destroy(b);
-            shake(1);
-            player.hurt(dmgBoss); 
-            if ( healthChar <= 0 && bossHealth > 0){
-                destroy(player);
-                shake(4);
-                go("Lose");
-            }
-        });
+
+        // player.onCollide("bullet", (b) => {
+        //     destroy(b);
+        //     shake(1);
+        //     console.log('Health before hit', healthChar);
+        //     player.hurt(bossDmg);
+        //     console.log('Health after hit', healthChar);
+        // });
+
+        // const healthbarChar = add([
+        //     rect(width() / 4, 20),
+        //     pos(width() / 3, height() - 40),
+        //     color(64, 236, 45),
+        //     fixed(),
+        //     {
+        //         max: healthChar,
+        //         set(hp) {
+        //             this.width = (width() / 4) * hp / this.max                    
+        //             this.flash = true
+        //         },
+        //     },
+        // ])
+
+        // player.on("hurt", () => {
+        //     healthbarChar.set(player.hp())
+        // })
+
+
         
         // SET BEHAVIOR ON WIN OR LOSS 
 
@@ -517,8 +507,21 @@ Promise.all([
             destroy(boss);
             shake(4);
             wait(2, () => {
-                player.move("left", 5000)
+                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
+                player.move("left", 5000);
+                clearInterval(platformTimeout);
                 go("Win");
+            });
+        })
+        player.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(player);
+            shake(4);
+            wait(2, () => {
+                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
+                player.move("left", 5000)
+                clearInterval(platformTimeout);
+                go("Lose");
             });
         })
 
@@ -529,7 +532,7 @@ Promise.all([
     scene("level2", () => {
         bossSpeed = 48;
         bossHealth = 400;
-        dmgBoss = 10;
+        bossDmg = 10;
 
         const background = add([
             sprite("fond_chateau"),
@@ -557,6 +560,7 @@ Promise.all([
             "ennemy",
         ])
 
+        // SETTING THE PLATFORMS
         add([
             sprite("sol_chateau"),
             pos(0, height() - 150),
@@ -565,6 +569,29 @@ Promise.all([
             body({ isStatic: true}),
             color(127, 200, 255),
         ])
+
+        let platformTimeout;
+        function addPlatform(){
+            add([
+                sprite("platform_space"),
+                area(),
+                pos(rand(100, 900), height() - 150),
+                body({ isStatic: true }),
+                offscreen({ destroy: true }),
+                anchor("center"),
+                "platform",
+                {
+                    speed: 100,
+                    dir: -1,
+                },
+            ])
+        };
+        onUpdate("platform", (p) => {
+            p.move(0, p.dir * p.speed)
+        })
+        platformTimeout = setInterval(addPlatform, 5000);
+
+
 
         player.onGround(() => {
             if ((!isKeyDown("left") && !isKeyDown("right")) || (!isKeyDown("q") && !isKeyDown("d"))) {
@@ -672,20 +699,22 @@ Promise.all([
             shake(4);
             wait(2, () => {
                 player.move("left", 5000)
+                clearInterval(platformTimeout);
                 go("Win2");
             });
         })
 
-        onCollide("bullet", "player", (b) => {
-            destroy(b);
-            shake(1);
-            healthChar -= dmgBoss; // CRÉER UNE VARIABLE DEGATS BOSS
-            if ( healthChar <= 0 && bossHealth > 0){
-                destroy(player);
-                shake(4);
-                go("Lose2");
-            }
-        });
+        player.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(player);
+            shake(4);
+            wait(2, () => {
+                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
+                player.move("left", 5000)
+                clearInterval(platformTimeout);
+                go("Lose");
+            });
+        })
     });
 
 
@@ -703,7 +732,7 @@ Promise.all([
 
         bossSpeed = 48;
         bossHealth = 600;
-        dmgBoss = 20;
+        bossDmg = 20;
 
         const background = add([
             sprite("fond_sucre2"),
@@ -731,7 +760,6 @@ Promise.all([
             "ennemy",
         ])
 
-        // REGLER PROBLEME DE SOL!!!
         add([
             sprite("sol_sucre2"),
             pos(0, height() - 118),
@@ -741,6 +769,27 @@ Promise.all([
             color(127, 200, 255),
             z(1000)
         ]);
+
+        let platformTimeout;
+        function addPlatform(){
+            add([
+                sprite("platform_space"),
+                area(),
+                pos(rand(100, 900), height() - 150),
+                body({ isStatic: true }),
+                offscreen({ destroy: true }),
+                anchor("center"),
+                "platform",
+                {
+                    speed: 100,
+                    dir: -1,
+                },
+            ])
+        };
+        onUpdate("platform", (p) => {
+            p.move(0, p.dir * p.speed)
+        })
+        platformTimeout = setInterval(addPlatform, 5000);
 
 
         player.onGround(() => {
@@ -844,24 +893,25 @@ Promise.all([
             destroy(boss);
             shake(4);
             wait(2, () => {
-                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
                 player.move("left", 5000)
+                clearInterval(platformTimeout);
                 go("Win3");
             });
         })
 
-        onCollide("bullet", "player", (b) => {
-            destroy(b);
-            shake(1);
-            healthChar -= dmgBoss; 
-            if ( healthChar <= 0 && bossHealth > 0){
-                destroy(player);
-                shake(4);
-                go("Lose3");
-            }
-        });
+        player.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(player);
+            shake(4);
+            wait(2, () => {
+                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
+                player.move("left", 5000)
+                clearInterval(platformTimeout);
+                go("Lose");
+            });
+        })
     });
 
     // Start the game scene
-    go("level3");
+    go("level1");
 });
