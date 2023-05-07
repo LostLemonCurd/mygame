@@ -59,7 +59,7 @@ Promise.all([
     });
 
     // define gravity
-    setGravity(2400)
+    setGravity(1000)
 
     // loading the sprites
     // playeres
@@ -150,10 +150,16 @@ Promise.all([
     loadSprite("couteau", "sprites/couteau.png")
     loadSprite("bullet", "sprites/fireball.png")
 
+    
     // Bosses
-    loadSprite("snowman", "sprites/snowman.png")
-    loadSprite("golem", "sprites/golem.png")
     loadSprite("robot", "sprites/robot.png")
+    loadSprite("golem", "sprites/golem.png")
+    loadSprite("snowman", "sprites/snowman.png")
+    
+    // Boss Projectile
+    loadSprite("punch", "sprites/punch.png")
+    loadSprite("rock", "sprites/rock.png")
+    loadSprite("snowball", "sprites/snowball.png")
 
     // Decors
     const floors = ["sol_chateau", "sol_sucre", "sol_space", "sol_sucre2"];
@@ -302,6 +308,7 @@ Promise.all([
         let bossSpeed = 48;
         let bossHealth = 200;
         let bossDmg = 5;
+        let bossAttackSpeed = 500;
 
 
         let background = add([
@@ -440,13 +447,13 @@ Promise.all([
 
         function spawnBulletBossRoof(p, mouseP, projectile) {
             const bulletBoss = add([
-                sprite(projectile), 
+                sprite("punch"), 
                 area(),
                 rotate(90),
                 pos(positionXBulletFromSky(),0),
                 anchor("center"),
                 outline(1),
-                move(mouseP, speedProj-500),
+                move(mouseP, bossAttackSpeed),
                 offscreen({ destroy: true }),
                 "bulletBoss",
             ]);
@@ -454,13 +461,13 @@ Promise.all([
 
         function spawnBulletBoss(p, mouseP, projectile) {
             const bulletBoss = add([
-                sprite(projectile), 
+                sprite("punch"), 
                 area(),
                 rotate(180),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
                 outline(1),
-                move(mouseP, speedProj-250),
+                move(mouseP, bossAttackSpeed),
                 offscreen({ destroy: true }),
                 "bulletBoss",
             ]);
@@ -496,8 +503,9 @@ Promise.all([
                 const angleInDeg = (angle * 180) / Math.PI;
                 spawnBulletBoss(bossP, angleInDeg, spriteProj);
             }, 1000);
+
             bulletRoofInterval = setInterval( () => {
-                for(let multipleSpawn = 0; multipleSpawn<6; multipleSpawn++){
+                for( let multipleSpawn = 0; multipleSpawn < 3; multipleSpawn++){
                     spawnBulletBossPosition = { x: positionXBulletFromSky(), y: 50};
                     spawnBulletBossRoof(spawnBulletBossPosition, 90, spriteProj);
                 }
@@ -594,6 +602,8 @@ Promise.all([
         bossSpeed = 48;
         bossHealth = 400;
         bossDmg = 10;
+        bossAttackSpeed = 400;
+
 
         const background = add([
             sprite("fond_chateau"),
@@ -621,7 +631,6 @@ Promise.all([
             "ennemy",
         ])
 
-        // SETTING THE PLATFORMS
         add([
             sprite("sol_chateau"),
             pos(0, height() - 150),
@@ -631,10 +640,11 @@ Promise.all([
             color(127, 200, 255),
         ])
 
+        // SETTING THE PLATFORMS
         let platformTimeout;
         function addPlatform(){
             add([
-                sprite("platform_space"),
+                sprite("platform_chateau"),
                 area(),
                 pos(rand(100, 900), height() - 150),
                 body({ isStatic: true }),
@@ -702,9 +712,11 @@ Promise.all([
             }
         });
 
-        function spawnBullet(p, mouseP) {
+        // SETTING THE ATTACKS AND THE HEALTHBARS
+
+        function spawnBulletHeroes(p, mouseP, projectile) {
             const bullet = add([
-                sprite(spriteProj), 
+                sprite(projectile), 
                 area(),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
@@ -714,6 +726,41 @@ Promise.all([
                 "bullet",
             ]);
         }
+
+        function positionXBulletFromSky(){
+            return Math.floor(Math.random() * 1001);
+        }
+
+        function spawnBulletBossRoof(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite("rock"), 
+                area(),
+                rotate(90),
+                pos(positionXBulletFromSky(),0),
+                anchor("center"),
+                outline(1),
+                move(mouseP, bossAttackSpeed),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        function spawnBulletBoss(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite("rock"), 
+                area(),
+                rotate(180),
+                pos(p.sub(-12, -12)),
+                anchor("center"),
+                outline(1),
+                move(mouseP, bossAttackSpeed),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        
+
         onClick(() => {
             const playerP = player.pos;
             const mouseP = mousePos();
@@ -721,22 +768,48 @@ Promise.all([
             const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
         
             const angleInDeg = (angle * 180) / Math.PI;
-            // for (let i = 0; i < 30; i++) {
-            //   spawnBullet(playerP, angleInDeg);
-            // }
-            spawnBullet(playerP, angleInDeg);
+            spawnBulletHeroes(playerP, angleInDeg, spriteProj);
         });
+
+        
+        // Boss shooting system 
+
+        // a ajouter au code
+        
+        
+        let bulletBossInterval;
+        let bulletRoofInterval;
+        if(bossHealth > 0 ){
+            bulletBossInterval = setInterval( () => {
+                const bossP = boss.pos;
+                const playerP = player.pos;
+
+                const angle = Math.atan2(playerP.y - bossP.y, playerP.x - bossP.x);
+                
+                const angleInDeg = (angle * 180) / Math.PI;
+                spawnBulletBoss(bossP, angleInDeg, spriteProj);
+            }, 1000);
+            bulletRoofInterval = setInterval( () => {
+                for(let multipleSpawn = 0; multipleSpawn < 3; multipleSpawn++){
+                    spawnBulletBossPosition = { x: positionXBulletFromSky(), y: 50};
+                    spawnBulletBossRoof(spawnBulletBossPosition, 90, spriteProj);
+                }
+            }, 1500);
+        } else {
+            bulletBoss = add([
+                cleanup()
+            ])
+        }
+        
 
         // Add a healthbar and update it on projectile hit
         boss.onCollide("bullet", (b) => {
             destroy(b);
             shake(1);
-            console.log('Health before hit', bossHealth);
             boss.hurt(dmgProj);
-            console.log('Health after hit', bossHealth);
         });
 
-        const healthbar = add([
+        const healthbarBoss = add([
             rect(width(), 24),
             pos(0, 0),
             color(240, 43, 43),
@@ -751,8 +824,34 @@ Promise.all([
         ])
 
         boss.on("hurt", () => {
-            healthbar.set(boss.hp())
+            healthbarBoss.set(boss.hp())
         })
+
+
+        player.onCollide("bulletBoss", (b) => {
+            destroy(b);
+            shake(1);
+            player.hurt(bossDmg);
+        });
+
+        const healthbarChar = add([
+            rect(width() / 4, 20),
+            pos(width() / 3, height() - 40),
+            color(64, 236, 45),
+            fixed(),
+            {
+                max: healthChar,
+                set(hp) {
+                    this.width = (width() / 4) * hp / this.max                    
+                    this.flash = true
+                },
+            },
+        ])
+
+        player.on("hurt", () => {
+            healthbarChar.set(player.hp())
+        })
+
 
         boss.on("death", () => {
             console.log('Health after click', bossHealth);
@@ -761,6 +860,8 @@ Promise.all([
             wait(2, () => {
                 player.move("left", 5000)
                 clearInterval(platformTimeout);
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
                 go("Win2");
             });
         })
@@ -773,7 +874,9 @@ Promise.all([
                 // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
                 player.move("left", 5000)
                 clearInterval(platformTimeout);
-                go("Lose");
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
+                go("Lose2");
             });
         })
     });
@@ -785,15 +888,11 @@ Promise.all([
 
     scene("level3", () => {
 
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
-
-        console.log(`Viewport width: ${viewportWidth}`);
-        console.log(`Viewport height: ${viewportHeight}`);
-
         bossSpeed = 48;
         bossHealth = 600;
         bossDmg = 20;
+        bossAttackSpeed = 300;
+
 
         const background = add([
             sprite("fond_sucre2"),
@@ -834,7 +933,7 @@ Promise.all([
         let platformTimeout;
         function addPlatform(){
             add([
-                sprite("platform_space"),
+                sprite("platform_sucre"),
                 area(),
                 pos(rand(100, 900), height() - 150),
                 body({ isStatic: true }),
@@ -900,19 +999,55 @@ Promise.all([
             }
         });
 
-        function spawnBullet(p, mouseP) {
+        // SETTING THE ATTACKS AND THE HEALTHBARS
+
+        function spawnBulletHeroes(p, mouseP, projectile) {
             const bullet = add([
-                sprite(spriteProj), 
+                sprite(projectile), 
                 area(),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
                 outline(1),
                 move(mouseP, speedProj),
                 offscreen({ destroy: true }),
-                // strings here means a tag
                 "bullet",
             ]);
         }
+
+        function positionXBulletFromSky(){
+            return Math.floor(Math.random() * 1001);
+        }
+
+        function spawnBulletBossRoof(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite("snowball"), 
+                area(),
+                rotate(90),
+                pos(positionXBulletFromSky(),0),
+                anchor("center"),
+                outline(1),
+                move(mouseP, bossAttackSpeed),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        function spawnBulletBoss(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite("snowball"), 
+                area(),
+                rotate(180),
+                pos(p.sub(-12, -12)),
+                anchor("center"),
+                outline(1),
+                move(mouseP, bossAttackSpeed),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        
+
         onClick(() => {
             const playerP = player.pos;
             const mouseP = mousePos();
@@ -920,18 +1055,45 @@ Promise.all([
             const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
         
             const angleInDeg = (angle * 180) / Math.PI;
-            spawnBullet(playerP, angleInDeg);
+            spawnBulletHeroes(playerP, angleInDeg, spriteProj);
         });
 
+        
+        // Boss shooting system 
+                
+        let bulletBossInterval;
+        let bulletRoofInterval;
+        if(bossHealth > 0 ){
+            bulletBossInterval = setInterval( () => {
+                const bossP = boss.pos;
+                const playerP = player.pos;
+
+                const angle = Math.atan2(playerP.y - bossP.y, playerP.x - bossP.x);
+                
+                const angleInDeg = (angle * 180) / Math.PI;
+                spawnBulletBoss(bossP, angleInDeg, spriteProj);
+            }, 1000);
+            bulletRoofInterval = setInterval( () => {
+                for(let multipleSpawn = 0; multipleSpawn < 3; multipleSpawn++){
+                    spawnBulletBossPosition = { x: positionXBulletFromSky(), y: 50};
+                    spawnBulletBossRoof(spawnBulletBossPosition, 90, spriteProj);
+                }
+            }, 1500);
+        } else {
+            bulletBoss = add([
+                cleanup()
+            ])
+        }
+        
+
+        // Add a healthbar and update it on projectile hit
         boss.onCollide("bullet", (b) => {
             destroy(b);
             shake(1);
-            console.log('Health before hit', bossHealth);
             boss.hurt(dmgProj);
-            console.log('Health after hit', bossHealth);
         });
 
-        const healthbar = add([
+        const healthbarBoss = add([
             rect(width(), 24),
             pos(0, 0),
             color(240, 43, 43),
@@ -946,7 +1108,32 @@ Promise.all([
         ])
 
         boss.on("hurt", () => {
-            healthbar.set(boss.hp())
+            healthbarBoss.set(boss.hp())
+        })
+
+
+        player.onCollide("bulletBoss", (b) => {
+            destroy(b);
+            shake(1);
+            player.hurt(bossDmg);
+        });
+
+        const healthbarChar = add([
+            rect(width() / 4, 20),
+            pos(width() / 3, height() - 40),
+            color(64, 236, 45),
+            fixed(),
+            {
+                max: healthChar,
+                set(hp) {
+                    this.width = (width() / 4) * hp / this.max                    
+                    this.flash = true
+                },
+            },
+        ])
+
+        player.on("hurt", () => {
+            healthbarChar.set(player.hp())
         })
 
         boss.on("death", () => {
@@ -956,6 +1143,8 @@ Promise.all([
             wait(2, () => {
                 player.move("left", 5000)
                 clearInterval(platformTimeout);
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
                 go("Win3");
             });
         })
@@ -968,11 +1157,13 @@ Promise.all([
                 // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
                 player.move("left", 5000)
                 clearInterval(platformTimeout);
-                go("Lose");
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
+                go("Lose3");
             });
         })
     });
 
     // Start the game scene
-    go("level1");
+    go("level3");
 });
