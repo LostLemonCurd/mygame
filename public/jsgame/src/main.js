@@ -1165,5 +1165,5 @@ Promise.all([
     });
 
     // Start the game scene
-    go("level3");
+    go("level1");
 });
