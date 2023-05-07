@@ -421,7 +421,7 @@ Promise.all([
 
         // SETTING THE ATTACKS AND THE HEALTHBARS
 
-        function spawnBullet(p, mouseP, projectile) {
+        function spawnBulletHeroes(p, mouseP, projectile) {
             const bullet = add([
                 sprite(projectile), 
                 area(),
@@ -433,6 +433,41 @@ Promise.all([
                 "bullet",
             ]);
         }
+
+        function positionXBulletFromSky(){
+            return Math.floor(Math.random() * 1001);
+        }
+
+        function spawnBulletBossRoof(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite(projectile), 
+                area(),
+                rotate(90),
+                pos(positionXBulletFromSky(),0),
+                anchor("center"),
+                outline(1),
+                move(mouseP, speedProj-500),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        function spawnBulletBoss(p, mouseP, projectile) {
+            const bulletBoss = add([
+                sprite(projectile), 
+                area(),
+                rotate(180),
+                pos(p.sub(-12, -12)),
+                anchor("center"),
+                outline(1),
+                move(mouseP, speedProj-250),
+                offscreen({ destroy: true }),
+                "bulletBoss",
+            ]);
+        }
+
+        
+
         onClick(() => {
             const playerP = player.pos;
             const mouseP = mousePos();
@@ -440,17 +475,45 @@ Promise.all([
             const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
         
             const angleInDeg = (angle * 180) / Math.PI;
-            spawnBullet(playerP, angleInDeg, spriteProj);
+            spawnBulletHeroes(playerP, angleInDeg, spriteProj);
         });
 
+        
+        // Boss shooting system 
+
+        // a ajouter au code
+        
+        
+        let bulletBossInterval;
+        let bulletRoofInterval;
+        if(bossHealth > 0 ){
+            bulletBossInterval = setInterval( () => {
+                const bossP = boss.pos;
+                const playerP = player.pos;
+
+                const angle = Math.atan2(playerP.y - bossP.y, playerP.x - bossP.x);
+                
+                const angleInDeg = (angle * 180) / Math.PI;
+                spawnBulletBoss(bossP, angleInDeg, spriteProj);
+            }, 1000);
+            bulletRoofInterval = setInterval( () => {
+                for(let multipleSpawn = 0; multipleSpawn<6; multipleSpawn++){
+                    spawnBulletBossPosition = { x: positionXBulletFromSky(), y: 50};
+                    spawnBulletBossRoof(spawnBulletBossPosition, 90, spriteProj);
+                }
+            }, 1500);
+        } else {
+            bulletBoss = add([
+                cleanup()
+            ])
+        }
+        
 
         // Add a healthbar and update it on projectile hit
         boss.onCollide("bullet", (b) => {
             destroy(b);
             shake(1);
-            console.log('Health before hit', bossHealth);
             boss.hurt(dmgProj);
-            console.log('Health after hit', bossHealth);
         });
 
         const healthbarBoss = add([
@@ -472,33 +535,29 @@ Promise.all([
         })
 
 
-        // player.onCollide("bullet", (b) => {
-        //     destroy(b);
-        //     shake(1);
-        //     console.log('Health before hit', healthChar);
-        //     player.hurt(bossDmg);
-        //     console.log('Health after hit', healthChar);
-        // });
+        player.onCollide("bulletBoss", (b) => {
+            destroy(b);
+            shake(1);
+            player.hurt(bossDmg);
+        });
 
-        // const healthbarChar = add([
-        //     rect(width() / 4, 20),
-        //     pos(width() / 3, height() - 40),
-        //     color(64, 236, 45),
-        //     fixed(),
-        //     {
-        //         max: healthChar,
-        //         set(hp) {
-        //             this.width = (width() / 4) * hp / this.max                    
-        //             this.flash = true
-        //         },
-        //     },
-        // ])
+        const healthbarChar = add([
+            rect(width() / 4, 20),
+            pos(width() / 3, height() - 40),
+            color(64, 236, 45),
+            fixed(),
+            {
+                max: healthChar,
+                set(hp) {
+                    this.width = (width() / 4) * hp / this.max                    
+                    this.flash = true
+                },
+            },
+        ])
 
-        // player.on("hurt", () => {
-        //     healthbarChar.set(player.hp())
-        // })
-
-
+        player.on("hurt", () => {
+            healthbarChar.set(player.hp())
+        })
         
         // SET BEHAVIOR ON WIN OR LOSS 
 
@@ -510,6 +569,8 @@ Promise.all([
                 // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
                 player.move("left", 5000);
                 clearInterval(platformTimeout);
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
                 go("Win");
             });
         })
@@ -521,11 +582,11 @@ Promise.all([
                 // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
                 player.move("left", 5000)
                 clearInterval(platformTimeout);
+                clearInterval(bulletBossInterval);
+                clearInterval(bulletRoofInterval);
                 go("Lose");
             });
         })
-
-
 
     });
 
