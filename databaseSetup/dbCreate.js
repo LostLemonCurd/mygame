@@ -1,11 +1,11 @@
 const mysql = require("mysql");
 
+
 // createConnection prépare la connexion à la base de données
 let con = mysql.createConnection({
-    host: "localhost",
+    host: "127.0.0.1",
     user: "root",
-    password: "root",
-    port: 8889,
+    password: "",
 }); 
 
 // connect permet de se connecter à la base de données on execute la préparation de la connexion

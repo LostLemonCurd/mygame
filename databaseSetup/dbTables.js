@@ -1,42 +1,15 @@
 const mysql = require("mysql");
+const config = require("../config")
 
 // createConnection prépare la connexion à la base de données
-// let con ;
-if (navigator.userAgent.indexOf('Mac OS X') != -1) {
-    let con = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root",
-        port: 8889,
-        database: "arenaHeroes",
-    }); 
-    
-    } else {
-    let con = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "",
-        port: 8889,
-        database: "arenaHeroes",
-    }); 
-    
-}
-
-
-// let con = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "root",
-//     port: 8889,
-//     database: "arenaHeroes",
-// }); 
+let con = mysql.createConnection(config.db); 
 
 con.connect(function (err){
     if (err) throw err;
     console.log("Connected!");
     // If the table characters does not exists, create it
     let sql = 
-    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly bool, projectile INT)";
+    "CREATE TABLE IF NOT EXISTS characters (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), health INT, speed INT, jumpForce INT, canFly BOOLEAN, projectile INT, spliceX INT)";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table characters created");
@@ -50,16 +23,37 @@ con.connect(function (err){
     });
 
     sql = 
-    "CREATE TABLE IF NOT EXISTS projectile (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), dmg INT, speed INT, gravity FLOAT, isFriendly bool)";
+    "CREATE TABLE IF NOT EXISTS projectile (id INT AUTO_INCREMENT PRIMARY KEY, sprite VARCHAR(255), dmg INT, speed INT, gravity FLOAT, isFriendly BOOLEAN)";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table projectile created");
     });
 
     sql = 
-    "CREATE TABLE IF NOT EXISTS pattern (id INT AUTO_INCREMENT PRIMARY KEY, idBoss INT FOREIGN KEY references boss(id), idProj INT FOREIGN KEY references projectile(id), amount INT)";
+    "CREATE TABLE IF NOT EXISTS pattern (id INT AUTO_INCREMENT PRIMARY KEY, idBoss INT, idProj INT, amount INT)";
     con.query(sql, function (err, result){
         if (err) throw err;
         console.log("Table pattern created");
     });
+
+    sql = "ALTER TABLE pattern ADD CONSTRAINT fk_boss_pattern FOREIGN KEY (idBoss) REFERENCES boss(id)";
+    con.query(sql, function (err, result){
+        if (err) throw err;
+        console.log("Table pattern altered");
+    });
+    
+    sql = "ALTER TABLE pattern ADD CONSTRAINT fk_proj_pattern FOREIGN KEY (idProj) REFERENCES projectile(id)";
+    con.query(sql, function (err, result){
+        if (err) throw err;
+        console.log("Table pattern altered");
+    });
+
+    sql = "ALTER TABLE characters ADD CONSTRAINT fk_player_pattern FOREIGN KEY (projectile) REFERENCES projectile(id)";
+    con.query(sql, function (err, result){
+        if (err) throw err;
+        console.log("Table pattern altered");
+    });
+
+
+
 });

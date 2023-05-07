@@ -2,8 +2,9 @@
   "dependencies": {
     "cors": "^2.8.5",
     "ejs": "^3.1.9",
+    "esbuild": "^0.17.18",
     "express": "^4.18.2",
-    "kaboom": "^2000.2.10",
+    "kaboom": "^3000.0.0-beta.5",
     "mysql": "^2.18.1",
     "mysql2": "^3.2.4",
     "nodemon": "^2.0.22"

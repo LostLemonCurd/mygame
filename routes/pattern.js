@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const patterns = require("../services/patterns.js");
+const patterns = require("../services/pattern.js");
 
 /* GET programming languages. */
 router.get("/", async function (req, res, next) {
