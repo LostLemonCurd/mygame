@@ -116,60 +116,92 @@ Promise.all([
 
     // loading the sprites
     // playeres
-    loadSprite("ninja", "sprites/ninja_marche.png", {
-        sliceX: 14,
+    loadSprite("ninja", "sprites/anim/ninja_anim.png", {
+        sliceX: 8,
         anims: {
             "idle": {
                 from: 0,
                 to: 1,
-                speed: 0.5,
+                speed: 2,
                 loop: true,
             },
             "run": {
-                from: 2,
-                to: 13,
-                speed: 3,
+                from: 5,
+                to: 7,
+                speed: 8,
+                loop: true,
+            },
+            "jump": {
+                from: 13,
+                to: 25,
+                speed: 30,
                 loop: true,
             },
         }
     })
-    loadSprite("bunny", "sprites/lapin_marche_droite.png", {
-        sliceX: 12,
+    loadSprite("bunny", "sprites/anim/lapin_anim.png", {
+        sliceX: 9,
         anims: {
             "idle": {
                 from: 0,
                 to: 1,
-                speed: 5,
+                speed: 2,
                 loop: true,
             },
             "run": {
-                from: 2,
-                to: 11,
-                speed: 10,
+                from: 6,
+                to: 8,
+                speed: 8,
                 loop: true,
-            }
+            },
+            "jump": {
+                from: 1,
+                to: 2,
+                speed: 1,
+                loop: true,
+            },
+            "dead": {
+                from: 3,
+                to: 3,
+                speed: 0,
+                loop: true,
+            },
         }
     });
-    loadSprite("stormy", "sprites/stormy_marche.png", {
-        sliceX: 12,
+    loadSprite("stormy", "sprites/anim/stormy_anim.png", {
+        sliceX: 7,
         anims: {
             "idle": {
                 from: 0,
                 to: 1,
-                speed: 5,
+                speed: 2,
                 loop: true,
             },
             "run": {
-                from: 2,
-                to: 11,
+                from: 4,
+                to: 6,
                 speed: 10,
+                loop: true,
+            },
+            "jump": {
+                from: 2,
+                to: 2,
+                speed: 0,
+                loop: true,
+            },
+            "dead": {
+                from: 3,
+                to: 3,
+                speed: 0,
                 loop: true,
             },
         }
     })
-
+    
     // player Projectiles 
     loadSprite("carotte", "sprites/carotte.png")
+    loadSprite("couteau", "sprites/couteau.png")
+    loadSprite("bullet", "sprites/fireball.png")
 
     // Bosses
     loadSprite("snowman", "sprites/snowman.png")
@@ -190,48 +222,156 @@ Promise.all([
 
     loadSprite("bgSky", "sprites/bgSky.png");
 
+    // Faire les loops pour les menus lose et win
+    loadSprite("ninjaLose1", "sprites/ninja_loose_n1.jpg");
+    loadSprite("ninjaLose2", "sprites/ninja_loose_n2.jpg");
+    loadSprite("ninjaLose3", "sprites/ninja_loose_n3.jpg");
+    loadSprite("ninjaWin1", "sprites/ninja_win_n1.jpg");
+    loadSprite("ninjaWin2", "sprites/ninja_win_n2.jpg");
+    loadSprite("ninjaWin3", "sprites/ninja_win_n3.jpg");
 
-    // Scene Battle begins here
-    // scene("menu", () => {
+    loadSprite("bunnyLose1", "sprites/bunny_loose_n1.jpg");
+    loadSprite("bunnyLose2", "sprites/bunny_loose_n2.jpg");
+    loadSprite("bunnyLose3", "sprites/bunny_loose_n3.jpg");
+    loadSprite("bunnyWin1", "sprites/bunny_win_n1.jpg");
+    loadSprite("bunnyWin2", "sprites/bunny_win_n2.jpg");
+    loadSprite("bunnyWin3", "sprites/bunny_win_n3.jpg");
+
+    loadSprite("stormyLose1", "sprites/stormy_loose_n1.jpg");
+    loadSprite("stormyLose2", "sprites/stormy_loose_n2.jpg");
+    loadSprite("stormyLose3", "sprites/stormy_loose_n3.jpg");
+    loadSprite("stormyWin1", "sprites/stormy_win_n1.jpg");
+    loadSprite("stormyWin2", "sprites/stormy_win_n2.jpg");
+    loadSprite("stormyWin3", "sprites/stormy_win_n3.jpg");
 
 
-    // });
+    // SETTING WIN/LOSE SCENES
 
-
-
-    scene("level1", () => {
-
-        // let sprite = "";
-        // let speedProj = 1200;
-        let bossSpeed = 48;
-        // let speedChar = 300;
-        let bossHealth = 1000;
-        // let playerHealth = 100;
-        // let jumpForce = 2000;
-
+    scene("Lose", () => {
+        console.log(`sprite/${spriteChar}_loose_n1.jpg`);
         let background = add([
-            sprite("fond_space"),
+            sprite(`${spriteChar}Lose1`),
             // Make the background centered on the screen
             pos(width() / 2, height() / 2),
             anchor("center"),
             // Allow the background to be scaled
-            scale(2),
+            scale(1),
             // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("level1");
+        });
+    });
+
+    scene("Win", () => {
+        let background = add([
+            sprite(`${spriteChar}Win1`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("level2");
+        });
+    });
+
+    scene("Lose2", () => {
+        let background = add([
+            sprite(`${spriteChar}Lose2`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("level2");
+        });
+    });
+
+    scene("Win2", () => {
+        let background = add([
+            sprite(`${spriteChar}Win2`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("level3");
+        });
+    });
+
+    scene("Lose3", () => {
+        console.log(`sprite/${spriteChar}_loose_n3.jpg`);
+        let background = add([
+            sprite(`${spriteChar}Lose3`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("level3");
+        });
+    });
+
+    scene("Win3", () => {
+        let background = add([
+            sprite(`${spriteChar}Win3`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(5, () => {
+            go("GameOver");
+        });
+    });
+
+
+    scene("level1", () => {
+
+        // define some hardcoded variables for the boss (to be replaced with a fetch request)
+        let bossSpeed = 48;
+        let bossHealth = 200;
+        let dmgBoss = 5;
+
+
+        let background = add([
+            sprite("fond_space"),
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            scale(2),
             fixed()
         ]);
 
 
-        // compose the player game object from multiple components and add it to the game
-        console.log('spriteChar', spriteChar);
-        const player = add([
-            sprite(spriteChar), // Possiblement Backend donc à générer à chaque début de partie
+        // compose the characters game object from multiple components and add it to the game
+        let player = add([
+            sprite(spriteChar),
             pos(80, 40),
             area(),
             body(),
             health(healthChar),
         ])
 
-        // .play is provided by sprite() component, it starts playing the specified animation (the animation information of "idle" is defined above in loadSprite)
         player.play("idle");
 
 
@@ -243,6 +383,7 @@ Promise.all([
             health(bossHealth),
             "ennemy",
         ])
+
 
         // Add a platform to hold the player
         add([
@@ -262,7 +403,9 @@ Promise.all([
                 player.play("run")
             }
         })
-        // press "left key" or "d" to move left
+
+        // SETTING THE CONTROLS
+
         onKeyDown("left", () => {
             if (player.isGrounded() && player.curAnim() !== "run") {
                 player.play("run")
@@ -278,14 +421,12 @@ Promise.all([
             player.move(-speedChar, 0)
         })
 
-        // press "right key" or "q" to move right 
         onKeyDown("right", () => {
             if (player.isGrounded() && player.curAnim() !== "run") {
                 player.play("run")
             }
             player.flipX = false;
             player.move(speedChar, 0);
-            // player.flipX(false);
         })
         onKeyDown("d", () => {
             if (player.isGrounded() && player.curAnim() !== "run") {
@@ -293,10 +434,8 @@ Promise.all([
             }
             player.flipX = false;
             player.move(speedChar, 0);
-            // player.flipX(false);
         })
 
-        // press space to jump when player is grounded
         onKeyPress("space", () => {
             if (player.isGrounded()) {
                 player.jump();
@@ -308,16 +447,18 @@ Promise.all([
             }
         });
 
-        function spawnBullet(p, mouseP) {
+
+        // SETTING THE ATTACKS AND THE HEALTHBARS
+
+        function spawnBullet(p, mouseP, projectile) {
             const bullet = add([
-                sprite('carotte'), // Possiblement backend
+                sprite(projectile), 
                 area(),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
                 outline(1),
                 move(mouseP, speedProj),
                 offscreen({ destroy: true }),
-                // strings here means a tag
                 "bullet",
             ]);
         }
@@ -328,67 +469,78 @@ Promise.all([
             const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
         
             const angleInDeg = (angle * 180) / Math.PI;
-            spawnBullet(playerP, angleInDeg);
+            spawnBullet(playerP, angleInDeg, spriteProj);
         });
 
-        onCollide("bullet", "ennemy", (b) => {
+        // Add a healthbar and update it on projectile hit
+        boss.onCollide("bullet", (b) => {
             destroy(b);
-            if (bossHealth === 0){
-                destroy(boss);
-                shake(3);
-                wait(5, () => {
-                    destroy(player);
-                    go("Win");
-                });
-            } else {
-                bossHealth -= 100;
+            shake(1);
+            console.log('Health before hit', bossHealth);
+            boss.hurt(dmgProj);
+            console.log('Health after hit', bossHealth);
+        });
+
+        const healthbar = add([
+            rect(width(), 24),
+            pos(0, 0),
+            color(240, 43, 43),
+            fixed(),
+            {
+                max: bossHealth,
+                set(hp) {
+                    this.width = width() * hp / this.max
+                    this.flash = true
+                },
+            },
+        ])
+
+        boss.on("hurt", () => {
+            healthbar.set(boss.hp())
+        })
+
+        onCollide("bullet", "player", (b) => {
+            destroy(b);
+            shake(1);
+            player.hurt(dmgBoss); 
+            if ( healthChar <= 0 && bossHealth > 0){
+                destroy(player);
+                shake(4);
+                go("Lose");
             }
         });
-    });
-
-    scene("Lose", () => {
         
-    });
+        // SET BEHAVIOR ON WIN OR LOSS 
 
-    scene("Win", () => {
-        add([
-            sprite("robot"),
-            anchor("center"),
-            pos(width() / 2, height() / 2),
-        ])
-        add([
-            text("Vous avez battu le boss !"),
-            color(0, 0, 0),
-            anchor("center"),
-            pos(width() / 2, height() / 2),
-        ])
-        wait(5, () => {
-            destroyAll();
-            go("level2");
-        });
+        boss.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(boss);
+            shake(4);
+            wait(2, () => {
+                player.move("left", 5000)
+                go("Win");
+            });
+        })
+
+
+
     });
 
     scene("level2", () => {
-        let speedProj = 1200
-        let bossSpeed = 48
-        let speedChar = 240
-        let bossHealth = 1000
-        let playerHealth = 100
+        bossSpeed = 48;
+        bossHealth = 400;
+        dmgBoss = 10;
 
-        let background = add([
+        const background = add([
             sprite("fond_chateau"),
-            // Make the background centered on the screen
             pos(width() / 2, height() / 2),
             anchor("center"),
-            // Allow the background to be scaled
             scale(2),
-            // Keep the background position fixed even when the camera moves
             fixed()
         ]);
 
 
-        // compose the player game object from multiple components and add it to the game
-        const  player = add([
+        let player = add([
             sprite(spriteChar), 
             pos(80, 40),
             area(),
@@ -405,7 +557,6 @@ Promise.all([
             "ennemy",
         ])
 
-        // Add a platform to hold the player
         add([
             sprite("sol_chateau"),
             pos(0, height() - 150),
@@ -415,23 +566,43 @@ Promise.all([
             color(127, 200, 255),
         ])
 
-        // press "left key" or "d" to move left
+        player.onGround(() => {
+            if ((!isKeyDown("left") && !isKeyDown("right")) || (!isKeyDown("q") && !isKeyDown("d"))) {
+                player.play("idle")
+            } else {
+                player.play("run")
+            }
+        })
         onKeyDown("left", () => {
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = true;
             player.move(-speedChar, 0)
         })
         onKeyDown("q", () => {
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = true;
             player.move(-speedChar, 0)
         })
 
-        // press "right key" or "q" to move right 
         onKeyDown("right", () => {
-            player.move(speedChar, 0)
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = false;
+            player.move(speedChar, 0);
         })
         onKeyDown("d", () => {
-            player.move(speedChar, 0)
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = false;
+            player.move(speedChar, 0);
         })
 
-        // press space to jump when player is grounded
         onKeyPress("space", () => {
             if (player.isGrounded()) {
                 player.jump();
@@ -445,14 +616,13 @@ Promise.all([
 
         function spawnBullet(p, mouseP) {
             const bullet = add([
-                sprite('carotte'), // Possiblement backend
+                sprite(spriteProj), 
                 area(),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
                 outline(1),
                 move(mouseP, speedProj),
                 offscreen({ destroy: true }),
-                // strings here means a tag
                 "bullet",
             ]);
         }
@@ -469,17 +639,51 @@ Promise.all([
             spawnBullet(playerP, angleInDeg);
         });
 
-        onCollide("bullet", "ennemy", (b) => {
+        // Add a healthbar and update it on projectile hit
+        boss.onCollide("bullet", (b) => {
             destroy(b);
-            if (bossHealth === 0){
-                destroy(boss);
-                shake();
-                wait(5, () => {
-                    destroyAll();
-                    go("level3");
-                });
-            } else {
-                bossHealth -= 10;
+            shake(1);
+            console.log('Health before hit', bossHealth);
+            boss.hurt(dmgProj);
+            console.log('Health after hit', bossHealth);
+        });
+
+        const healthbar = add([
+            rect(width(), 24),
+            pos(0, 0),
+            color(240, 43, 43),
+            fixed(),
+            {
+                max: bossHealth,
+                set(hp) {
+                    this.width = width() * hp / this.max
+                    this.flash = true
+                },
+            },
+        ])
+
+        boss.on("hurt", () => {
+            healthbar.set(boss.hp())
+        })
+
+        boss.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(boss);
+            shake(4);
+            wait(2, () => {
+                player.move("left", 5000)
+                go("Win2");
+            });
+        })
+
+        onCollide("bullet", "player", (b) => {
+            destroy(b);
+            shake(1);
+            healthChar -= dmgBoss; // CRÉER UNE VARIABLE DEGATS BOSS
+            if ( healthChar <= 0 && bossHealth > 0){
+                destroy(player);
+                shake(4);
+                go("Lose2");
             }
         });
     });
@@ -490,27 +694,22 @@ Promise.all([
 
 
     scene("level3", () => {
-        let speedProj = 1200
-        let bossSpeed = 48
-        let speedChar = 240
-        let bossHealth = 1000
-        let playerHealth = 100
 
-        let background = add([
+        bossSpeed = 48;
+        bossHealth = 600;
+        dmgBoss = 20;
+
+        const background = add([
             sprite("fond_sucre"),
-            // Make the background centered on the screen
             pos(width() / 2, height() / 2),
             anchor("center"),
-            // Allow the background to be scaled
             scale(2),
-            // Keep the background position fixed even when the camera moves
             fixed()
         ]);
 
 
-        // compose the player game object from multiple components and add it to the game
         const player = add([
-            sprite(spriteChar), // Possiblement Backend donc à générer à chaque début de partie
+            sprite(spriteChar), 
             pos(80, 40),
             area(),
             body(),
@@ -526,7 +725,7 @@ Promise.all([
             "ennemy",
         ])
 
-        // Add a platform to hold the player
+        // REGLER PROBLEME DE SOL!!!
         add([
             sprite("sol_sucre"),
             pos(0, height() - 235),
@@ -546,23 +745,42 @@ Promise.all([
             z(100),
         ]);
 
-        // press "left key" or "d" to move left
+        player.onGround(() => {
+            if ((!isKeyDown("left") && !isKeyDown("right")) || (!isKeyDown("q") && !isKeyDown("d"))) {
+                player.play("idle")
+            } else {
+                player.play("run")
+            }
+        })
         onKeyDown("left", () => {
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = true;
             player.move(-speedChar, 0)
         })
         onKeyDown("q", () => {
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = true;
             player.move(-speedChar, 0)
         })
-
-        // press "right key" or "q" to move right 
         onKeyDown("right", () => {
-            player.move(speedChar, 0)
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = false;
+            player.move(speedChar, 0);
         })
         onKeyDown("d", () => {
-            player.move(speedChar, 0)
+            if (player.isGrounded() && player.curAnim() !== "run") {
+                player.play("run")
+            }
+            player.flipX = false;
+            player.move(speedChar, 0);
         })
 
-        // press space to jump when player is grounded
         onKeyPress("space", () => {
             if (player.isGrounded()) {
                 player.jump();
@@ -576,7 +794,7 @@ Promise.all([
 
         function spawnBullet(p, mouseP) {
             const bullet = add([
-                sprite('carotte'), // Possiblement backend
+                sprite(spriteProj), 
                 area(),
                 pos(p.sub(-12, -12)),
                 anchor("center"),
@@ -594,25 +812,58 @@ Promise.all([
             const angle = Math.atan2(mouseP.y - playerP.y, mouseP.x - playerP.x);
         
             const angleInDeg = (angle * 180) / Math.PI;
-            // for (let i = 0; i < 30; i++) {
-            //   spawnBullet(playerP, angleInDeg);
-            // }
             spawnBullet(playerP, angleInDeg);
         });
 
-        onCollide("bullet", "ennemy", (b) => {
+        boss.onCollide("bullet", (b) => {
             destroy(b);
-            if (bossHealth === 0){
-                destroy(golem);
-                shake();
-                wait(5, () => {
-                    go("level3");
-                });
-            } else {
-                bossHealth -= 10;
+            shake(1);
+            console.log('Health before hit', bossHealth);
+            boss.hurt(dmgProj);
+            console.log('Health after hit', bossHealth);
+        });
+
+        const healthbar = add([
+            rect(width(), 24),
+            pos(0, 0),
+            color(240, 43, 43),
+            fixed(),
+            {
+                max: bossHealth,
+                set(hp) {
+                    this.width = width() * hp / this.max
+                    this.flash = true
+                },
+            },
+        ])
+
+        boss.on("hurt", () => {
+            healthbar.set(boss.hp())
+        })
+
+        boss.on("death", () => {
+            console.log('Health after click', bossHealth);
+            destroy(boss);
+            shake(4);
+            wait(2, () => {
+                // Pour éviter d'avoir des sprites qui se superposent sur la scène suivante ils sont détruits manuellement 
+                player.move("left", 5000)
+                go("Win3");
+            });
+        })
+
+        onCollide("bullet", "player", (b) => {
+            destroy(b);
+            shake(1);
+            healthChar -= dmgBoss; 
+            if ( healthChar <= 0 && bossHealth > 0){
+                destroy(player);
+                shake(4);
+                go("Lose3");
             }
         });
     });
+
     // Start the game scene
     go("level1");
 });
