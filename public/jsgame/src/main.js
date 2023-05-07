@@ -209,8 +209,8 @@ Promise.all([
     loadSprite("robot", "sprites/robot.png")
 
     // Decors
-    const floors = ["sol_chateau", "sol_sucre", "sol_space"];
-    const fond = ["fond_chateau", "fond_sucre", "fond_space"];
+    const floors = ["sol_chateau", "sol_sucre", "sol_space", "sol_sucre2"];
+    const fond = ["fond_chateau", "fond_sucre", "fond_space", 'fond_sucre2'];
 
     floors.forEach((floor) => {
         loadSprite(floor, `sprites/${floor}.png`);
@@ -695,15 +695,21 @@ Promise.all([
 
     scene("level3", () => {
 
+        const viewportWidth = window.innerWidth;
+        const viewportHeight = window.innerHeight;
+
+        console.log(`Viewport width: ${viewportWidth}`);
+        console.log(`Viewport height: ${viewportHeight}`);
+
         bossSpeed = 48;
         bossHealth = 600;
         dmgBoss = 20;
 
         const background = add([
-            sprite("fond_sucre"),
+            sprite("fond_sucre2"),
             pos(width() / 2, height() / 2),
             anchor("center"),
-            scale(2),
+            scale(1),
             fixed()
         ]);
 
@@ -727,8 +733,8 @@ Promise.all([
 
         // REGLER PROBLEME DE SOL!!!
         add([
-            sprite("sol_sucre"),
-            pos(0, height() - 235),
+            sprite("sol_sucre2"),
+            pos(0, height() - 118),
             outline(4),
             area(),
             body({ isStatic: true}),
@@ -736,14 +742,6 @@ Promise.all([
             z(1000)
         ]);
 
-
-        add([
-            rect(width(), 130),
-            pos(0, height() - 130),
-            area(),
-            body({ isStatic: true}),
-            z(100),
-        ]);
 
         player.onGround(() => {
             if ((!isKeyDown("left") && !isKeyDown("right")) || (!isKeyDown("q") && !isKeyDown("d"))) {
@@ -865,5 +863,5 @@ Promise.all([
     });
 
     // Start the game scene
-    go("level1");
+    go("level3");
 });
