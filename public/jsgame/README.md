@@ -2,13 +2,15 @@ Bonjour et bienvenue sur arenaHeroes !
 
 Les étapes pour lancer le jeu:
 
-1 - Créer la base de données arenaHeroes en utilisant les commandes "node dbCreate", "node dbTables" puis "node dbMigration" dans le dossier databaseSetup
+1 - Lancer le serveur MAMP/XAMP
 
-2 - Lancer le serveur avec la commande "npm run dev" depuis index.js dans le dossier mygame
+1bis - Créer la base de données arenaHeroes en utilisant les commandes "node dbCreate", "node dbTables" puis "node dbMigration" dans le dossier databaseSetup (Si vous êtes sur Windows, il faudra supprimer le mot de passe "root" puis remplacer le port "8889" par "8080" dans les fichiers congif.js et dbCreate.js).
 
-3 - Lancer le jeu avec la commande "npm run dev" depuis main.js dans le dossier jsgame
+2 - Lancer le serveur avec la commande "npm run dev" depuis "index.js" dans le dossier mygame
 
-4 - Naviger depuis le localhost:8000 vers le fichier premier_page.html 
+3 - Lancer le jeu avec la commande "npm run dev" depuis "main.js" dans le dossier jsgame
+
+4 - Naviger depuis le localhost:8000 vers le fichier "premier_page.html" 
 
 5 - Choisir un personnage 
 

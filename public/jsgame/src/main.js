@@ -200,6 +200,7 @@ Promise.all([
     loadSprite("stormyWin2", "sprites/stormy_win_n2.jpg");
     loadSprite("stormyWin3", "sprites/stormy_win_n3.jpg");
 
+    loadSprite("GameOver", "sprites/gameover.jpg");
 
     // SETTING WIN/LOSE SCENES
 
@@ -301,6 +302,21 @@ Promise.all([
         });
     });
 
+    scene("GameOver", () => {
+        let background = add([
+            sprite(`GameOver`),
+            // Make the background centered on the screen
+            pos(width() / 2, height() / 2),
+            anchor("center"),
+            // Allow the background to be scaled
+            scale(1),
+            // Keep the background position fixed even when the camera moves
+            fixed()
+        ]);
+        wait(10, () => {
+            go("level1");
+        });
+    });
 
     scene("level1", () => {
 
