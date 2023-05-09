@@ -4,7 +4,7 @@ Les étapes pour lancer le jeu:
 
 1 - Lancer le serveur MAMP/XAMP
 
-1bis - Créer la base de données arenaHeroes en utilisant les commandes "node dbCreate", "node dbTables" puis "node dbMigration" dans le dossier databaseSetup (Si vous êtes sur Windows, il faudra supprimer le mot de passe "root" puis remplacer le port "8889" par "8080" dans les fichiers congif.js et dbCreate.js).
+1bis - Créer la base de données arenaHeroes en utilisant les commandes "node dbCreate", "node dbTables" puis "node dbMigration" dans le dossier databaseSetup (Si vous êtes sur Windows, il faudra supprimer le mot de passe "root" puis supprimer la variable "port" dans les fichiers congif.js et dbCreate.js).
 
 2 - Lancer le serveur avec la commande "npm run dev" depuis "index.js" dans le dossier mygame
 
