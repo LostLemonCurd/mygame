@@ -503,10 +503,7 @@ Promise.all([
 
         
         // Boss shooting system 
-
-        // a ajouter au code
-        
-        
+            
         let bulletBossInterval;
         let bulletRoofInterval;
         if(bossHealth > 0 ){
