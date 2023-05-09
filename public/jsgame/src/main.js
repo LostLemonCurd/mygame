@@ -387,7 +387,7 @@ Promise.all([
         onUpdate("platform", (p) => {
             p.move(0, p.dir * p.speed)
         })
-        platformTimeout = setInterval(addPlatform, 5000);
+        platformTimeout = setInterval(addPlatform, 3000);
 
         // Switch to "idle" or "run" animation when player hits ground
         player.onGround(() => {
